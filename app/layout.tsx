@@ -64,6 +64,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  verification: {
+    google: 'nVN-QMqk9vLK3P8un4o4KKFqzdvZmW59j74cewfGOjY',
+  },
 };
 
 export default function RootLayout({
@@ -75,6 +78,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <meta name="google-site-verification" content="nVN-QMqk9vLK3P8un4o4KKFqzdvZmW59j74cewfGOjY" />
       </head>
       <body className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
         <SchemaOrg />
