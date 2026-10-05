@@ -1,46 +1,44 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { ADS_ENABLED } from '@/lib/constants';
 
 export default function NativeBanner() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!ADS_ENABLED || !containerRef.current) return;
-
-    const currentContainer = containerRef.current;
-
-    // Check if script already appended to body to avoid duplicates
-    const scriptId = 'ad-script-native-banner';
-    let script = document.getElementById(scriptId) as HTMLScriptElement;
-
-    if (!script) {
-      script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://bellnewyork.org/21/789ab693c6687d19182df51556048563';
-      script.setAttribute('data-cfasync', 'false');
-      script.async = true;
-      document.body.appendChild(script);
-    }
-
-    return () => {
-      if (currentContainer) {
-        currentContainer.innerHTML = '';
-      }
-    };
-  }, []);
-
   if (!ADS_ENABLED) return null;
+
+  const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: sans-serif; background: transparent; }
+    #container-789ab693c6687d19182df51556048563 { width: 100%; display: flex; justify-content: center; }
+  </style>
+</head>
+<body>
+  <div id="container-789ab693c6687d19182df51556048563"></div>
+  <script type="text/javascript">
+    window.onerror = function() { return true; };
+  </script>
+  <script type="text/javascript" src="https://bellnewyork.org/21/789ab693c6687d19182df51556048563" data-cfasync="false" async onerror="console.debug('Native ad error handled');"></script>
+</body>
+</html>`;
 
   return (
     <div className="w-full flex flex-col items-center justify-center my-6">
       <span className="text-[10px] text-slate-400 uppercase tracking-widest mb-1.5 select-none">Sponsored Feed</span>
       <div
-        ref={containerRef}
         id="container-789ab693c6687d19182df51556048563"
         className="w-full min-h-[250px] flex items-center justify-center bg-slate-50/50 border border-slate-100 rounded-2xl overflow-hidden"
-      />
+      >
+        <iframe
+          title="ad-native-banner"
+          srcDoc={htmlContent}
+          className="w-full min-h-[250px]"
+          style={{ border: 'none', overflow: 'hidden' }}
+          scrolling="no"
+        />
+      </div>
     </div>
   );
 }

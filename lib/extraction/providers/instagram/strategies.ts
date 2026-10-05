@@ -3,6 +3,144 @@ import { validateMediaStreamUrl } from '../../security';
 import { executeOpenSourceBackendExtraction } from '../../backend';
 import { sanitizeText } from '../../../security';
 
+function decodeSnapApp(args: string[]): string {
+  const [h, , n, t, e] = args;
+  const tNum = Number(t);
+  const eNum = Number(e);
+  function decode(d: string, e: number, f: number) {
+    const g = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
+    const hArr = g.slice(0, e);
+    const iArr = g.slice(0, f);
+    let j = d.split('').reverse().reduce((a, b, c) => {
+      const idx = hArr.indexOf(b);
+      if (idx !== -1) return a + idx * Math.pow(e, c);
+      return a;
+    }, 0);
+    let k = '';
+    while (j > 0) {
+      k = iArr[j % f] + k;
+      j = Math.floor(j / f);
+    }
+    return k || '0';
+  }
+  let result = '';
+  for (let i = 0, len = h.length; i < len;) {
+    let s = '';
+    while (i < len && h[i] !== n[eNum]) {
+      s += h[i];
+      i++;
+    }
+    i++;
+    for (let j = 0; j < n.length; j++) s = s.replace(new RegExp(n[j], 'g'), j.toString());
+    result += String.fromCharCode(Number(decode(s, eNum, 10)) - tNum);
+  }
+  try {
+    const bytes = new Uint8Array(result.split('').map((char) => char.charCodeAt(0)));
+    return new TextDecoder('utf-8').decode(bytes);
+  } catch {
+    return result;
+  }
+}
+
+// Strategy 0: High-Reliability Direct Stream Gateway
+export class InstagramSnapSaveStrategy implements ExtractionStrategy {
+  name = 'Instagram Fast Direct Extraction Gateway';
+
+  async execute(url: URL, context: ExtractionContext): Promise<StrategyResult> {
+    try {
+      const cleanUrl = url.toString().split('?')[0];
+      const formData = new URLSearchParams();
+      formData.append('url', cleanUrl);
+
+      const res = await fetch('https://snapsave.app/action.php?lang=en', {
+        method: 'POST',
+        signal: context.signal,
+        headers: {
+          'accept': '*/*',
+          'content-type': 'application/x-www-form-urlencoded',
+          'origin': 'https://snapsave.app',
+          'referer': 'https://snapsave.app/',
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+        body: formData,
+      });
+
+      if (!res.ok) {
+        return { success: false, status: 'BLOCKED', message: `HTTP ${res.status}` };
+      }
+
+      const text = await res.text();
+      if (!text.includes('decodeURIComponent(escape(r))}(')) {
+        return { success: false, status: 'NOT_FOUND', message: 'No encoded payload returned' };
+      }
+
+      const encodedArgs = text
+        .split('decodeURIComponent(escape(r))}(')[1]
+        .split('))')[0]
+        .split(',')
+        .map((v) => v.replace(/"/g, '').trim());
+
+      const decodedScript = decodeSnapApp(encodedArgs);
+      const downloadSectionMatch = decodedScript.match(
+        /getElementById\("download-section"\)\.innerHTML = "([\s\S]*?)"; document\.getElementById\("inputData"\)/
+      );
+      const html = downloadSectionMatch ? downloadSectionMatch[1].replace(/\\(\\)?/g, '') : decodedScript;
+
+      let title = url.pathname.includes('/reel/') ? 'Instagram Reel' : 'Instagram Video';
+      const descMatch = html.match(/class="video-des"[^>]*>([\s\S]*?)<\/span>/i);
+      if (descMatch && descMatch[1]) {
+        title = sanitizeText(descMatch[1].replace(/<[^>]+>/g, '').trim().slice(0, 120));
+      }
+
+      let thumbnailUrl: string | undefined;
+      const thumbMatch =
+        html.match(/class="download-items__thumb"[^>]*>[\s\S]*?<img[^>]*src="([^"]+)"/i) ||
+        html.match(/<img[^>]*src="([^"]+)"/i);
+      if (thumbMatch && thumbMatch[1]) {
+        thumbnailUrl = thumbMatch[1].replace(/&amp;/g, '&');
+      }
+
+      const videoLinks = html.match(/href="(https?:\/\/[^"]+)"/g) || [];
+      const validLinks = videoLinks
+        .map((l) => l.replace(/^href="/, '').replace(/"$/, '').replace(/&amp;/g, '&'))
+        .filter((l) => !l.includes('play.google.com') && /^https?:\/\//i.test(l));
+
+      if (validLinks.length === 0) {
+        return { success: false, status: 'NOT_FOUND', message: 'No video stream URLs found in decoded payload' };
+      }
+
+      const directCdnUrl = validLinks[0];
+      const validation = await validateMediaStreamUrl(directCdnUrl, context.signal);
+
+      if (validation.valid && validation.finalUrl) {
+        return {
+          success: true,
+          status: 'SUCCESS',
+          title,
+          thumbnailUrl,
+          previewVideoUrl: validation.finalUrl,
+          formats: [
+            {
+              id: 'instagram-hd-direct',
+              quality: '1080p HD',
+              mime: validation.contentType || 'video/mp4',
+              ext: 'mp4',
+              hasAudio: true,
+              sizeBytes: validation.contentLength,
+              rawCdnUrl: validation.finalUrl,
+            },
+          ],
+        };
+      }
+
+      return { success: false, status: 'NOT_FOUND', message: 'Stream URL validation failed' };
+    } catch (err: unknown) {
+      return { success: false, status: 'TEMPORARY_FAILURE', message: err instanceof Error ? err.message : 'Error' };
+    }
+  }
+}
+
 // Strategy 1: Instagram Embed HTML with Bot / Mobile User-Agent
 export class InstagramEmbedStrategy implements ExtractionStrategy {
   name = 'Instagram Embed & SharedData Parser (Crawler UA)';

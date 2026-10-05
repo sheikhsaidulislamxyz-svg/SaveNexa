@@ -1,5 +1,6 @@
 import { ProviderExtractor, ExtractionContext, ExtractionEngineResult } from '../../types';
 import {
+  InstagramSnapSaveStrategy,
   InstagramEmbedStrategy,
   InstagramGraphQLStrategy,
   InstagramOpenSourceBackendStrategy,
@@ -25,6 +26,7 @@ export class InstagramProviderExtractor implements ProviderExtractor {
     const isReel = url.pathname.includes('/reel/') || url.pathname.includes('/reels/');
 
     const strategies = [
+      new InstagramSnapSaveStrategy(),
       new InstagramEmbedStrategy(),
       new InstagramGraphQLStrategy(),
       new InstagramOpenSourceBackendStrategy(),

@@ -123,11 +123,17 @@ export default function DownloaderForm({
     inputRef.current?.focus();
   };
 
-  const handleCopySource = () => {
+  const handleCopySource = async () => {
     if (!result) return;
-    navigator.clipboard.writeText(result.sourceUrl);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2500);
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(result.sourceUrl);
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2500);
+      }
+    } catch {
+      // Ignore clipboard write failures in sandboxed iframes
+    }
   };
 
   const activeFormat = useMemo(() => {

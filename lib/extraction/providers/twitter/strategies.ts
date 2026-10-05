@@ -3,6 +3,14 @@ import { validateMediaStreamUrl } from '../../security';
 import { executeOpenSourceBackendExtraction } from '../../backend';
 import { sanitizeText } from '../../../security';
 
+function getSyndicationToken(id: string): string {
+  try {
+    return (Number(id) / 1e15 * Math.PI).toString(36).replace(/(0+|\.)/g, '');
+  } catch {
+    return 'x';
+  }
+}
+
 export class TwitterSyndicationStrategy implements ExtractionStrategy {
   name = 'X (Twitter) Syndication Result API';
 
@@ -15,7 +23,8 @@ export class TwitterSyndicationStrategy implements ExtractionStrategy {
     }
 
     try {
-      const synEndpoint = `https://cdn.syndication.twimg.com/tweet-result?id=${tweetId}&token=x`;
+      const synToken = getSyndicationToken(tweetId);
+      const synEndpoint = `https://cdn.syndication.twimg.com/tweet-result?id=${tweetId}&lang=en&token=${synToken}`;
       const res = await fetch(synEndpoint, {
         signal: context.signal,
         headers: {
@@ -30,10 +39,53 @@ export class TwitterSyndicationStrategy implements ExtractionStrategy {
       }
 
       const synData = await res.json();
+
+      if (synData.__typename === 'TweetTombstone') {
+        const tombText = synData.tombstone?.text?.text || 'This post is from a suspended account or has been deleted.';
+        return { success: false, status: 'BLOCKED', message: tombText };
+      }
+
       const author = synData?.user?.name ? `@${sanitizeText(synData.user.screen_name || synData.user.name)}` : undefined;
       const title = sanitizeText(synData?.text?.slice(0, 140)) || 'X (Twitter) Media';
 
-      const mediaDetails = synData?.mediaDetails?.[0] || synData?.video || synData?.mediaDetails;
+      let mediaDetails = synData?.mediaDetails?.[0] || synData?.video || synData?.mediaDetails;
+
+      // If no media is directly attached to the tweet, check if it quotes or links to another tweet
+      if (!mediaDetails && Array.isArray(synData.entities?.urls)) {
+        for (const entityUrl of synData.entities.urls) {
+          const expUrl = entityUrl.expanded_url || entityUrl.url;
+          const quotedTweetMatch = typeof expUrl === 'string' ? expUrl.match(/status\/(\d+)/) : null;
+          if (quotedTweetMatch && quotedTweetMatch[1] && quotedTweetMatch[1] !== tweetId) {
+            const quotedId = quotedTweetMatch[1];
+            try {
+              const qToken = getSyndicationToken(quotedId);
+              const qRes = await fetch(`https://cdn.syndication.twimg.com/tweet-result?id=${quotedId}&lang=en&token=${qToken}`, {
+                signal: context.signal,
+                headers: {
+                  'User-Agent':
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                  'Accept': 'application/json',
+                },
+              });
+              if (qRes.ok) {
+                const qData = await qRes.json();
+                if (qData.__typename === 'TweetTombstone') {
+                  const tombMsg = qData.tombstone?.text?.text || 'The referenced post is from a suspended account or was deleted.';
+                  return { success: false, status: 'BLOCKED', message: tombMsg };
+                }
+                const qMedia = qData?.mediaDetails?.[0] || qData?.video || qData?.mediaDetails;
+                if (qMedia) {
+                  mediaDetails = qMedia;
+                  break;
+                }
+              }
+            } catch {
+              // ignore and continue
+            }
+          }
+        }
+      }
+
       if (!mediaDetails) {
         return { success: false, status: 'NOT_FOUND', message: 'No mediaDetails found in syndication' };
       }
@@ -146,7 +198,9 @@ export class TwitterVxGatewayStrategy implements ExtractionStrategy {
 
         // Check for video first
         const mediaAll = tweet.media?.all || [];
-        const videoMedia = mediaAll.find((m: { type: string }) => m.type === 'video' || m.type === 'gif');
+        const videoMedia =
+          (tweet.media?.videos && tweet.media.videos[0]) ||
+          mediaAll.find((m: { type: string }) => m.type === 'video' || m.type === 'gif');
 
         if (videoMedia) {
           const variants = videoMedia.variants || [];

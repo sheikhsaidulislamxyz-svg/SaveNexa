@@ -80,6 +80,24 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <meta name="google-site-verification" content="nVN-QMqk9vLK3P8un4o4KKFqzdvZmW59j74cewfGOjY" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.addEventListener('error', function(e) {
+                if (e && (e.message === 'Script error.' || !e.filename || e.filename.indexOf(window.location.origin) === -1)) {
+                  e.preventDefault && e.preventDefault();
+                  e.stopPropagation && e.stopPropagation();
+                  return true;
+                }
+              }, true);
+              window.addEventListener('unhandledrejection', function(e) {
+                if (e && e.reason && e.reason.message && e.reason.message.indexOf('Script error') !== -1) {
+                  e.preventDefault && e.preventDefault();
+                }
+              });
+            `,
+          }}
+        />
       </head>
       <body className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
         <SchemaOrg />
