@@ -1,7 +1,24 @@
 export const SITE_NAME = 'SaveNexa';
 export const SITE_TAGLINE = 'Simple tools to save public media from the web';
 export const SITE_DESCRIPTION = 'Fast, clean, mobile-first public media downloader. Save public videos, audio, and media from TikTok, Instagram, Facebook, X, Reddit, Pinterest, and direct links directly in your browser.';
-export const SITE_URL = process.env.APP_URL || 'https://savenexa.pages.dev';
+export function getSiteUrl(): string {
+  // 1. Check Vercel automatic system variable
+  const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+  if (vercelUrl && vercelUrl !== 'MY_APP_URL') {
+    return vercelUrl.startsWith('http') ? vercelUrl : `https://${vercelUrl}`;
+  }
+
+  // 2. Check custom APP_URL
+  const appUrl = process.env.APP_URL;
+  if (appUrl && appUrl !== 'MY_APP_URL' && appUrl.startsWith('http')) {
+    return appUrl;
+  }
+
+  // 3. Fallback to localhost for local dev
+  return 'http://localhost:3000';
+}
+
+export const SITE_URL = getSiteUrl();
 
 export const MAX_URL_LENGTH = 4096;
 export const MAX_ANALYZE_ATTEMPTS_PER_WINDOW = 15;
