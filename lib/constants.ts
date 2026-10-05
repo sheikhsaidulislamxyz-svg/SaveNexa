@@ -25,7 +25,7 @@ export const MAX_ANALYZE_ATTEMPTS_PER_WINDOW = 15;
 export const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 export const FETCH_TIMEOUT_MS = 8000; // 8 seconds
 
-export const ADS_ENABLED = false; // Reserved ad slots, disabled for MVP
+export const ADS_ENABLED = true; // Enabled for premium ad integration
 
 export const ERROR_CODES = {
   INVALID_URL: 'INVALID_URL',

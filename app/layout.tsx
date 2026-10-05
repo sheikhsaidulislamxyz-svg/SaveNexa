@@ -3,6 +3,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SchemaOrg from '@/components/SchemaOrg';
+import SocialBar from '@/components/ads/SocialBar';
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/constants';
 
 export const viewport: Viewport = {
@@ -82,6 +83,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
         <SchemaOrg />
+        <SocialBar />
         <Header />
         <main className="flex-1 w-full">{children}</main>
         <Footer />
