@@ -1,6 +1,6 @@
 {
   "name": "SaveNexa — Social Video & Media Downloader",
-  "description": "Fast, clean, mobile-first public media downloader. Save public videos, audio, and media from TikTok, Instagram, Facebook, X, Reddit, Pinterest, and direct links directly in your browser.",
+  "description": "Download public videos and media from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, mobile-friendly and easy to use.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -37,6 +37,7 @@ export default function NativeBanner() {
           className="w-full min-h-[250px]"
           style={{ border: 'none', overflow: 'hidden' }}
           scrolling="no"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
         />
       </div>
     </div>

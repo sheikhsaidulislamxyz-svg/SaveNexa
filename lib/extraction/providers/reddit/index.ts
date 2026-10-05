@@ -1,5 +1,5 @@
 import { ProviderExtractor, ExtractionContext, ExtractionEngineResult } from '../../types';
-import { RedditEmbedStrategy, RedditJsonStrategy, RedditOpenSourceBackendStrategy } from './strategies';
+import { RedditEmbedStrategy } from './strategies';
 import { normalizeAndSortFormats } from '../../normalize';
 import { EXTRACTION_ERROR_MESSAGES } from '../../errors';
 
@@ -22,8 +22,6 @@ export class RedditProviderExtractor implements ProviderExtractor {
 
     const strategies = [
       new RedditEmbedStrategy(),
-      new RedditJsonStrategy(),
-      new RedditOpenSourceBackendStrategy(),
     ];
 
     const strategyLogs: {
@@ -49,9 +47,8 @@ export class RedditProviderExtractor implements ProviderExtractor {
             platform: 'reddit',
             platformName: 'Reddit',
             type: 'video',
-            title: res.title || 'Reddit Video',
+            title: res.title || 'Reddit Video / Media',
             author: res.author,
-            authorUrl: res.authorUrl,
             thumbnailUrl: res.thumbnailUrl,
             previewVideoUrl: res.previewVideoUrl || sortedFormats[0].rawCdnUrl,
             durationSeconds: res.durationSeconds || null,
@@ -82,7 +79,7 @@ export class RedditProviderExtractor implements ProviderExtractor {
       ok: false,
       code: 'NO_MEDIA_FOUND',
       message: EXTRACTION_ERROR_MESSAGES.NO_MEDIA_FOUND,
-      details: 'All extraction strategies failed to extract a public media stream from Reddit.',
+      details: 'All Reddit extraction strategies failed to extract a public media stream.',
       strategyLogs,
     };
   }

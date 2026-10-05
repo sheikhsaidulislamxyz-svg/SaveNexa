@@ -29,13 +29,19 @@ export default function SchemaOrg({
         name: SITE_NAME,
         url: SITE_URL,
         description: SITE_DESCRIPTION,
-        logo: `${SITE_URL}/favicon.svg`,
+        logo: {
+          '@type': 'ImageObject',
+          url: `${SITE_URL}/favicon-512.png`,
+          width: 512,
+          height: 512,
+        },
+        image: `${SITE_URL}/favicon-512.png`,
       },
       {
         '@type': 'WebSite',
         '@id': `${SITE_URL}/#website`,
         name: SITE_NAME,
-        alternateName: ['SaveNexa Media Tools', 'SaveNexa Video Downloader'],
+        alternateName: ['SaveNexa', 'SaveNexa Video Downloader', 'SaveNexa Media Downloader'],
         url: SITE_URL,
         description: SITE_DESCRIPTION,
         publisher: {

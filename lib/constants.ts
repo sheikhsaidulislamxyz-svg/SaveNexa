@@ -1,6 +1,6 @@
 export const SITE_NAME = 'SaveNexa';
-export const SITE_TAGLINE = 'Simple tools to save public media from the web';
-export const SITE_DESCRIPTION = 'Fast, clean, mobile-first public media downloader. Save public videos, audio, and media from TikTok, Instagram, Facebook, X, Reddit, Pinterest, and direct links directly in your browser.';
+export const SITE_TAGLINE = 'Social Video & Media Downloader';
+export const SITE_DESCRIPTION = 'Download public videos and media from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, mobile-friendly and easy to use.';
 export function getSiteUrl(): string {
   // 1. Check Vercel automatic system variable
   const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
@@ -154,7 +154,7 @@ export const SUPPORTED_PLATFORMS: PlatformConfig[] = [
     badge: 'Direct Video URL',
     description: 'Inspect and save direct online video files (.mp4, .webm, .mov, .m4v, .ogv) from any server.',
     iconName: 'Globe',
-    sampleUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    sampleUrl: 'https://www.w3schools.com/html/mov_bbb.mp4',
     supportedTypes: ['Direct .mp4 files', '.webm web streams', '.mov / .m4v media'],
     placeholderText: 'Paste direct video URL (e.g., https://example.com/video.mp4)',
   },

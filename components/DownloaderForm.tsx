@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
   Download,
   Clipboard,
@@ -69,6 +69,18 @@ export default function DownloaderForm({
   const inputRef = useRef<HTMLInputElement>(null);
   const activeAbortControllerRef = useRef<AbortController | null>(null);
   const activeTimeoutTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Unmount cleanup for timers and pending requests
+  useEffect(() => {
+    return () => {
+      if (activeAbortControllerRef.current) {
+        activeAbortControllerRef.current.abort('Component unmounted');
+      }
+      if (activeTimeoutTimerRef.current) {
+        clearTimeout(activeTimeoutTimerRef.current);
+      }
+    };
+  }, []);
 
   // Derive detected platform as user types
   const detectedPlatform = useMemo(() => {
@@ -259,14 +271,12 @@ export default function DownloaderForm({
     });
 
     try {
-      const downloadEndpoint = `${format.downloadUrl}&mode=redirect`;
+      const downloadEndpoint = format.downloadUrl;
 
-      // Trigger download using direct ephemeral anchor in background window/tab
-      // so primary page tab context stays 100% unlocked and free
+      // Trigger direct same-origin attachment download without new tabs or redirects
       const a = document.createElement('a');
       a.href = downloadEndpoint;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
+      a.setAttribute('download', '');
       a.style.display = 'none';
 
       document.body.appendChild(a);

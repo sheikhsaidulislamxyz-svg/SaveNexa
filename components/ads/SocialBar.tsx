@@ -1,37 +1,17 @@
 'use client';
 
-import { useEffect } from 'react';
+import Script from 'next/script';
 import { ADS_ENABLED } from '@/lib/constants';
 
 export default function SocialBar() {
-  useEffect(() => {
-    if (!ADS_ENABLED) return;
+  if (!ADS_ENABLED) return null;
 
-    const scriptId = 'adsterra-social-bar';
-    if (document.getElementById(scriptId)) return;
-
-    try {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://bellnewyork.org/14/82392d996fbb040f16c1ca3fcfda6e95';
-      script.setAttribute('data-cfasync', 'false');
-      script.async = true;
-      script.onerror = () => {
-        // Swallowed silently so third-party failure does not affect the downloader
-      };
-
-      document.body.appendChild(script);
-    } catch {
-      // Ignore if DOM not ready
-    }
-
-    return () => {
-      const el = document.getElementById(scriptId);
-      if (el && document.body.contains(el)) {
-        document.body.removeChild(el);
-      }
-    };
-  }, []);
-
-  return null;
+  return (
+    <Script
+      id="adsterra-social-bar"
+      src="https://bellnewyork.org/14/82392d996fbb040f16c1ca3fcfda6e95"
+      strategy="afterInteractive"
+      data-cfasync="false"
+    />
+  );
 }

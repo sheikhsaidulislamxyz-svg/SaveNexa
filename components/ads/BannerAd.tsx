@@ -68,6 +68,7 @@ export default function BannerAd({ size, className = '' }: BannerAdProps) {
           height={config.height}
           style={{ border: 'none', overflow: 'hidden' }}
           scrolling="no"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms"
         />
       </div>
     </div>

@@ -1,147 +1,125 @@
 import { ExtractionStrategy, StrategyResult, ExtractionContext } from '../../types';
 import { validateMediaStreamUrl } from '../../security';
-import { executeOpenSourceBackendExtraction } from '../../backend';
 import { sanitizeText } from '../../../security';
 
-function decodeSnapApp(args: string[]): string {
-  const [h, , n, t, e] = args;
-  const tNum = Number(t);
-  const eNum = Number(e);
-  function decode(d: string, e: number, f: number) {
-    const g = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/'.split('');
-    const hArr = g.slice(0, e);
-    const iArr = g.slice(0, f);
-    let j = d.split('').reverse().reduce((a, b, c) => {
-      const idx = hArr.indexOf(b);
-      if (idx !== -1) return a + idx * Math.pow(e, c);
-      return a;
-    }, 0);
-    let k = '';
-    while (j > 0) {
-      k = iArr[j % f] + k;
-      j = Math.floor(j / f);
-    }
-    return k || '0';
-  }
-  let result = '';
-  for (let i = 0, len = h.length; i < len;) {
-    let s = '';
-    while (i < len && h[i] !== n[eNum]) {
-      s += h[i];
-      i++;
-    }
-    i++;
-    for (let j = 0; j < n.length; j++) s = s.replace(new RegExp(n[j], 'g'), j.toString());
-    result += String.fromCharCode(Number(decode(s, eNum, 10)) - tNum);
-  }
-  try {
-    const bytes = new Uint8Array(result.split('').map((char) => char.charCodeAt(0)));
-    return new TextDecoder('utf-8').decode(bytes);
-  } catch {
-    return result;
-  }
-}
-
-// Strategy 0: High-Reliability Direct Stream Gateway
-export class InstagramSnapSaveStrategy implements ExtractionStrategy {
-  name = 'Instagram Fast Direct Extraction Gateway';
+// Strategy 1: High-Reliability Direct Stream Gateway via Discord/Telegram-compatible Instagram Proxies
+export class InstagramDirectGatewayStrategy implements ExtractionStrategy {
+  name = 'Instagram Direct Stream Gateway';
 
   async execute(url: URL, context: ExtractionContext): Promise<StrategyResult> {
-    try {
-      const cleanUrl = url.toString().split('?')[0];
-      const formData = new URLSearchParams();
-      formData.append('url', cleanUrl);
+    const pathname = url.pathname;
+    const shortcodeMatch = pathname.match(/\/(p|reel|reels|tv)\/([A-Za-z0-9_\-]+)/i);
+    const shortcode = shortcodeMatch ? shortcodeMatch[2] : '';
+    const isReel = pathname.includes('/reel/') || pathname.includes('/reels/');
 
-      const res = await fetch('https://snapsave.app/action.php?lang=en', {
-        method: 'POST',
+    if (!shortcode) {
+      return { success: false, status: 'UNSUPPORTED', message: 'Could not parse Instagram shortcode.' };
+    }
+
+    const gateways = [
+      `https://kkinstagram.com/${isReel ? 'reel' : 'p'}/${shortcode}/`,
+      `https://ddinstagram.com/${isReel ? 'reel' : 'p'}/${shortcode}/`,
+      `https://g.ddinstagram.com/${isReel ? 'reel' : 'p'}/${shortcode}/`,
+      `https://instagramez.com/${isReel ? 'reel' : 'p'}/${shortcode}/`,
+    ];
+
+    // Simultaneously fetch metadata from Embed page if possible
+    let author: string | undefined;
+    let title = isReel ? 'Instagram Reel' : 'Instagram Video';
+    let thumbnailUrl: string | undefined;
+
+    try {
+      const embedRes = await fetch(`https://www.instagram.com/p/${shortcode}/embed/captioned/`, {
         signal: context.signal,
         headers: {
-          'accept': '*/*',
-          'content-type': 'application/x-www-form-urlencoded',
-          'origin': 'https://snapsave.app',
-          'referer': 'https://snapsave.app/',
-          'user-agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Accept': 'text/html',
         },
-        body: formData,
       });
 
-      if (!res.ok) {
-        return { success: false, status: 'BLOCKED', message: `HTTP ${res.status}` };
+      if (embedRes.ok) {
+        const html = await embedRes.text();
+        const authorMatch =
+          html.match(/class="CaptionUsername"[^>]*>([^<]+)<\/a>/i) ||
+          html.match(/href="\/([^"/]+)\/"[^>]*class="UsernameText"/i) ||
+          html.match(/"username":"([^"]+)"/i);
+        if (authorMatch && authorMatch[1]) {
+          author = `@${sanitizeText(authorMatch[1])}`;
+        }
+
+        const captionMatch =
+          html.match(/class="CaptionComments"[^>]*>([\s\S]*?)<\/div>/) ||
+          html.match(/class="Caption"[^>]*>([\s\S]*?)<\/div>/);
+        if (captionMatch && captionMatch[1]) {
+          const cleanCaption = captionMatch[1].replace(/<[^>]+>/g, '').trim();
+          if (cleanCaption) {
+            title = sanitizeText(cleanCaption.slice(0, 120));
+          }
+        }
+
+        const imgMatch =
+          html.match(/class="EmbeddedMediaImage"[^>]*src="([^"]+)"/i) ||
+          html.match(/property="og:image" content="([^"]+)"/i) ||
+          html.match(/"display_url":"([^"]+)"/i);
+        if (imgMatch && imgMatch[1]) {
+          thumbnailUrl = imgMatch[1].replace(/&amp;/g, '&').replace(/\\u0026/g, '&');
+        }
       }
-
-      const text = await res.text();
-      if (!text.includes('decodeURIComponent(escape(r))}(')) {
-        return { success: false, status: 'NOT_FOUND', message: 'No encoded payload returned' };
-      }
-
-      const encodedArgs = text
-        .split('decodeURIComponent(escape(r))}(')[1]
-        .split('))')[0]
-        .split(',')
-        .map((v) => v.replace(/"/g, '').trim());
-
-      const decodedScript = decodeSnapApp(encodedArgs);
-      const downloadSectionMatch = decodedScript.match(
-        /getElementById\("download-section"\)\.innerHTML = "([\s\S]*?)"; document\.getElementById\("inputData"\)/
-      );
-      const html = downloadSectionMatch ? downloadSectionMatch[1].replace(/\\(\\)?/g, '') : decodedScript;
-
-      let title = url.pathname.includes('/reel/') ? 'Instagram Reel' : 'Instagram Video';
-      const descMatch = html.match(/class="video-des"[^>]*>([\s\S]*?)<\/span>/i);
-      if (descMatch && descMatch[1]) {
-        title = sanitizeText(descMatch[1].replace(/<[^>]+>/g, '').trim().slice(0, 120));
-      }
-
-      let thumbnailUrl: string | undefined;
-      const thumbMatch =
-        html.match(/class="download-items__thumb"[^>]*>[\s\S]*?<img[^>]*src="([^"]+)"/i) ||
-        html.match(/<img[^>]*src="([^"]+)"/i);
-      if (thumbMatch && thumbMatch[1]) {
-        thumbnailUrl = thumbMatch[1].replace(/&amp;/g, '&');
-      }
-
-      const videoLinks = html.match(/href="(https?:\/\/[^"]+)"/g) || [];
-      const validLinks = videoLinks
-        .map((l) => l.replace(/^href="/, '').replace(/"$/, '').replace(/&amp;/g, '&'))
-        .filter((l) => !l.includes('play.google.com') && /^https?:\/\//i.test(l));
-
-      if (validLinks.length === 0) {
-        return { success: false, status: 'NOT_FOUND', message: 'No video stream URLs found in decoded payload' };
-      }
-
-      const directCdnUrl = validLinks[0];
-      const validation = await validateMediaStreamUrl(directCdnUrl, context.signal);
-
-      if (validation.valid && validation.finalUrl) {
-        return {
-          success: true,
-          status: 'SUCCESS',
-          title,
-          thumbnailUrl,
-          previewVideoUrl: validation.finalUrl,
-          formats: [
-            {
-              id: 'instagram-hd-direct',
-              quality: '1080p HD',
-              mime: validation.contentType || 'video/mp4',
-              ext: 'mp4',
-              hasAudio: true,
-              sizeBytes: validation.contentLength,
-              rawCdnUrl: validation.finalUrl,
-            },
-          ],
-        };
-      }
-
-      return { success: false, status: 'NOT_FOUND', message: 'Stream URL validation failed' };
-    } catch (err: unknown) {
-      return { success: false, status: 'TEMPORARY_FAILURE', message: err instanceof Error ? err.message : 'Error' };
+    } catch {
+      // non-blocking metadata fetch
     }
+
+    // Try resolving direct video stream location from gateways
+    for (const gw of gateways) {
+      try {
+        const res = await fetch(gw, {
+          method: 'GET',
+          redirect: 'manual',
+          signal: context.signal,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)',
+            'Accept': 'text/html,*/*',
+          },
+        });
+
+        const location = res.headers.get('location');
+        if (location && /^https?:\/\//i.test(location)) {
+          const directCdnUrl = location.replace(/&amp;/g, '&');
+          const validation = await validateMediaStreamUrl(directCdnUrl, context.signal);
+
+          if (validation.valid && validation.finalUrl) {
+            return {
+              success: true,
+              status: 'SUCCESS',
+              title,
+              author,
+              authorUrl: author ? `https://www.instagram.com/${author.replace('@', '')}/` : undefined,
+              thumbnailUrl,
+              previewVideoUrl: validation.finalUrl,
+              formats: [
+                {
+                  id: 'instagram-hd-direct',
+                  quality: '1080p HD',
+                  mime: validation.contentType || 'video/mp4',
+                  ext: 'mp4',
+                  hasAudio: true,
+                  sizeBytes: validation.contentLength,
+                  rawCdnUrl: validation.finalUrl,
+                },
+              ],
+            };
+          }
+        }
+      } catch {
+        // try next gateway
+      }
+    }
+
+    return { success: false, status: 'NOT_FOUND', message: 'Could not resolve stream URL from Instagram gateways.' };
   }
 }
 
-// Strategy 1: Instagram Embed HTML with Bot / Mobile User-Agent
+// Strategy 2: Instagram Embed HTML with Bot / Mobile User-Agent
 export class InstagramEmbedStrategy implements ExtractionStrategy {
   name = 'Instagram Embed & SharedData Parser (Crawler UA)';
 
@@ -149,15 +127,16 @@ export class InstagramEmbedStrategy implements ExtractionStrategy {
     const pathname = url.pathname;
     const shortcodeMatch = pathname.match(/\/(p|reel|reels|tv)\/([A-Za-z0-9_\-]+)/i);
     const shortcode = shortcodeMatch ? shortcodeMatch[2] : '';
+    const isReel = pathname.includes('/reel/') || pathname.includes('/reels/');
 
     if (!shortcode) {
       return { success: false, status: 'UNSUPPORTED', message: 'Could not parse Instagram shortcode.' };
     }
 
     const embedUrls = [
-      `https://www.instagram.com/p/${shortcode}/embed/`,
-      `https://www.instagram.com/reel/${shortcode}/embed/`,
       `https://www.instagram.com/p/${shortcode}/embed/captioned/`,
+      `https://www.instagram.com/reel/${shortcode}/embed/captioned/`,
+      `https://www.instagram.com/p/${shortcode}/embed/`,
     ];
 
     const crawlerUas = [
@@ -184,7 +163,7 @@ export class InstagramEmbedStrategy implements ExtractionStrategy {
           const cleanHtml = html.replace(/\\u0026/g, '&').replace(/\\/g, '');
 
           let author: string | undefined;
-          let title = 'Instagram Reel / Video';
+          let title = isReel ? 'Instagram Reel' : 'Instagram Video';
           let thumbnailUrl: string | undefined;
           let rawVideoUrl: string | undefined;
 
@@ -207,14 +186,13 @@ export class InstagramEmbedStrategy implements ExtractionStrategy {
           }
 
           const imgMatch =
-            cleanHtml.match(/class="EmbeddedMediaImage" src="([^"]+)"/i) ||
+            cleanHtml.match(/class="EmbeddedMediaImage"[^>]*src="([^"]+)"/i) ||
             cleanHtml.match(/property="og:image" content="([^"]+)"/i) ||
             cleanHtml.match(/"display_url":"([^"]+)"/i);
           if (imgMatch && imgMatch[1]) {
             thumbnailUrl = imgMatch[1].replace(/&amp;/g, '&');
           }
 
-          // Search for direct MP4 CDN links in HTML
           const mp4Matches = cleanHtml.match(/https?:\/\/[^"'\s\\]+?\.mp4[^"'\s\\]*/gi);
           if (mp4Matches && mp4Matches.length > 0) {
             rawVideoUrl = mp4Matches[0].replace(/&amp;/g, '&');
@@ -266,7 +244,7 @@ export class InstagramEmbedStrategy implements ExtractionStrategy {
   }
 }
 
-// Strategy 2: Instagram Public GraphQL Query API
+// Strategy 3: Instagram GraphQL Query API
 export class InstagramGraphQLStrategy implements ExtractionStrategy {
   name = 'Instagram GraphQL Query API';
 
@@ -274,6 +252,7 @@ export class InstagramGraphQLStrategy implements ExtractionStrategy {
     const pathname = url.pathname;
     const shortcodeMatch = pathname.match(/\/(p|reel|reels|tv)\/([A-Za-z0-9_\-]+)/i);
     const shortcode = shortcodeMatch ? shortcodeMatch[2] : '';
+    const isReel = pathname.includes('/reel/') || pathname.includes('/reels/');
 
     if (!shortcode) {
       return { success: false, status: 'UNSUPPORTED', message: 'No shortcode found.' };
@@ -293,6 +272,8 @@ export class InstagramGraphQLStrategy implements ExtractionStrategy {
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest',
+            'X-IG-App-ID': '936619743392459',
+            'X-ASBD-ID': '198387',
           },
         });
 
@@ -305,7 +286,7 @@ export class InstagramGraphQLStrategy implements ExtractionStrategy {
           const author = media.owner?.username ? `@${sanitizeText(media.owner.username)}` : undefined;
           const captionText =
             media.edge_media_to_caption?.edges?.[0]?.node?.text || media.caption?.text || media.title;
-          const title = captionText ? sanitizeText(captionText.slice(0, 120)) : 'Instagram Video / Reel';
+          const title = captionText ? sanitizeText(captionText.slice(0, 120)) : (isReel ? 'Instagram Reel' : 'Instagram Video');
           const thumbnailUrl = media.display_url || media.thumbnail_src;
 
           let rawVideoUrl = media.video_url;
@@ -346,14 +327,5 @@ export class InstagramGraphQLStrategy implements ExtractionStrategy {
     }
 
     return { success: false, status: 'NOT_FOUND', message: 'No valid media in GraphQL API.' };
-  }
-}
-
-// Strategy 3: Open-Source Backend Fallback
-export class InstagramOpenSourceBackendStrategy implements ExtractionStrategy {
-  name = 'Instagram Open-Source Backend';
-
-  async execute(url: URL, context: ExtractionContext): Promise<StrategyResult> {
-    return executeOpenSourceBackendExtraction(url.toString(), context);
   }
 }

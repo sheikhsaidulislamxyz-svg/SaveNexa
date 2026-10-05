@@ -66,7 +66,7 @@ export default function OnlineVideoDownloaderPage() {
         <div className="pt-2">
           <DownloaderForm
             placeholderText="Paste direct media URL (e.g. https://.../video.mp4)"
-            defaultSampleUrl="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            defaultSampleUrl="https://www.w3schools.com/html/mov_bbb.mp4"
           />
         </div>
       </section>

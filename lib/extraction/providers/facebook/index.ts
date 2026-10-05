@@ -1,5 +1,8 @@
 import { ProviderExtractor, ExtractionContext, ExtractionEngineResult } from '../../types';
-import { FacebookWatchStrategy, FacebookOpenSourceBackendStrategy } from './strategies';
+import {
+  FacebookPluginStrategy,
+  FacebookMobileWatchStrategy,
+} from './strategies';
 import { normalizeAndSortFormats } from '../../normalize';
 import { EXTRACTION_ERROR_MESSAGES } from '../../errors';
 
@@ -19,10 +22,11 @@ export class FacebookProviderExtractor implements ProviderExtractor {
 
   async extract(url: URL, context: ExtractionContext): Promise<ExtractionEngineResult> {
     const cleanUrl = url.toString();
+    const isReel = cleanUrl.includes('/reel/') || cleanUrl.includes('/reels/');
 
     const strategies = [
-      new FacebookWatchStrategy(),
-      new FacebookOpenSourceBackendStrategy(),
+      new FacebookPluginStrategy(),
+      new FacebookMobileWatchStrategy(),
     ];
 
     const strategyLogs: {
@@ -45,17 +49,17 @@ export class FacebookProviderExtractor implements ProviderExtractor {
 
           return {
             ok: true,
-            platform: 'facebook',
-            platformName: 'Facebook',
+            platform: isReel ? 'facebook-reels' : 'facebook',
+            platformName: isReel ? 'Facebook Reels' : 'Facebook',
             type: 'video',
-            title: res.title || 'Facebook Video',
+            title: res.title || (isReel ? 'Facebook Reel' : 'Facebook Video'),
             thumbnailUrl: res.thumbnailUrl,
             previewVideoUrl: res.previewVideoUrl || sortedFormats[0].rawCdnUrl,
             durationSeconds: res.durationSeconds || null,
             sourceUrl: cleanUrl,
             formats: sortedFormats.map((f) => ({
               id: f.id,
-              label: `Facebook Stream (${f.quality})`,
+              label: `${isReel ? 'Facebook Reel' : 'Facebook Video'} (${f.quality})`,
               quality: f.quality,
               mime: f.mime,
               ext: f.ext,
@@ -79,7 +83,7 @@ export class FacebookProviderExtractor implements ProviderExtractor {
       ok: false,
       code: 'NO_MEDIA_FOUND',
       message: EXTRACTION_ERROR_MESSAGES.NO_MEDIA_FOUND,
-      details: 'All extraction strategies failed to extract a public media stream from Facebook.',
+      details: 'All Facebook extraction strategies (Plugin API, Mobile Web Scraper) failed to extract a public media stream.',
       strategyLogs,
     };
   }

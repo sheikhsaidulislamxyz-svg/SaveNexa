@@ -12,7 +12,7 @@ let lastCleanup = Date.now();
 
 function cleanup() {
   const now = Date.now();
-  if (now - lastCleanup < CLEANUP_INTERVAL) return;
+  if (now - lastCleanup < CLEANUP_INTERVAL && memoryStore.size < 2000) return;
   lastCleanup = now;
 
   for (const [key, record] of memoryStore.entries()) {
@@ -22,6 +22,11 @@ function cleanup() {
     } else {
       record.timestamps = validTimestamps;
     }
+  }
+
+  // Safety threshold if store grows beyond 2000 IPs
+  if (memoryStore.size > 2000) {
+    memoryStore.clear();
   }
 }
 

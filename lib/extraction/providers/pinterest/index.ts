@@ -1,5 +1,5 @@
 import { ProviderExtractor, ExtractionContext, ExtractionEngineResult } from '../../types';
-import { PinterestPinStrategy, PinterestOpenSourceBackendStrategy } from './strategies';
+import { PinterestPinStrategy } from './strategies';
 import { normalizeAndSortFormats } from '../../normalize';
 import { EXTRACTION_ERROR_MESSAGES } from '../../errors';
 
@@ -12,7 +12,8 @@ export class PinterestProviderExtractor implements ProviderExtractor {
     return (
       host === 'pinterest.com' ||
       host.endsWith('.pinterest.com') ||
-      host === 'pin.it'
+      host === 'pin.it' ||
+      host.includes('pinimg.com')
     );
   }
 
@@ -21,7 +22,6 @@ export class PinterestProviderExtractor implements ProviderExtractor {
 
     const strategies = [
       new PinterestPinStrategy(),
-      new PinterestOpenSourceBackendStrategy(),
     ];
 
     const strategyLogs: {
@@ -78,7 +78,7 @@ export class PinterestProviderExtractor implements ProviderExtractor {
       ok: false,
       code: 'NO_MEDIA_FOUND',
       message: EXTRACTION_ERROR_MESSAGES.NO_MEDIA_FOUND,
-      details: 'All extraction strategies failed to extract a public media stream from Pinterest.',
+      details: 'All Pinterest extraction strategies failed to extract a public media stream.',
       strategyLogs,
     };
   }

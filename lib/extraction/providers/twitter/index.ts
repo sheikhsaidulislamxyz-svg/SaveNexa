@@ -2,7 +2,6 @@ import { ProviderExtractor, ExtractionContext, ExtractionEngineResult } from '..
 import {
   TwitterSyndicationStrategy,
   TwitterVxGatewayStrategy,
-  TwitterOpenSourceBackendStrategy,
 } from './strategies';
 import { normalizeAndSortFormats } from '../../normalize';
 import { EXTRACTION_ERROR_MESSAGES } from '../../errors';
@@ -18,17 +17,17 @@ export class TwitterProviderExtractor implements ProviderExtractor {
       host.endsWith('.twitter.com') ||
       host === 'x.com' ||
       host.endsWith('.x.com') ||
-      host === 't.co'
+      host === 't.co' ||
+      host.includes('twimg.com')
     );
   }
 
   async extract(url: URL, context: ExtractionContext): Promise<ExtractionEngineResult> {
-    const cleanUrl = url.toString();
+    const cleanUrl = url.toString().split('?')[0];
 
     const strategies = [
-      new TwitterSyndicationStrategy(),
       new TwitterVxGatewayStrategy(),
-      new TwitterOpenSourceBackendStrategy(),
+      new TwitterSyndicationStrategy(),
     ];
 
     const strategyLogs: {
@@ -53,8 +52,8 @@ export class TwitterProviderExtractor implements ProviderExtractor {
             ok: true,
             platform: 'twitter',
             platformName: 'X (Twitter)',
-            type: 'video',
-            title: res.title || 'X (Twitter) Video',
+            type: sortedFormats[0].mime.startsWith('image') ? 'image' : 'video',
+            title: res.title || 'X (Twitter) Media',
             author: res.author,
             authorUrl: res.authorUrl,
             thumbnailUrl: res.thumbnailUrl,
@@ -63,7 +62,7 @@ export class TwitterProviderExtractor implements ProviderExtractor {
             sourceUrl: cleanUrl,
             formats: sortedFormats.map((f) => ({
               id: f.id,
-              label: `X Video (${f.quality})`,
+              label: `X Media (${f.quality})`,
               quality: f.quality,
               mime: f.mime,
               ext: f.ext,
@@ -87,7 +86,7 @@ export class TwitterProviderExtractor implements ProviderExtractor {
       ok: false,
       code: 'NO_MEDIA_FOUND',
       message: EXTRACTION_ERROR_MESSAGES.NO_MEDIA_FOUND,
-      details: 'All extraction strategies failed to extract a public media stream from X/Twitter.',
+      details: 'All Twitter/X extraction strategies failed to extract a public media stream.',
       strategyLogs,
     };
   }

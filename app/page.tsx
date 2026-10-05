@@ -78,7 +78,7 @@ export default function HomePage() {
 
           {/* Interactive Downloader Island */}
           <div className="pt-2">
-            <DownloaderForm defaultSampleUrl="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" />
+            <DownloaderForm defaultSampleUrl="https://www.w3schools.com/html/mov_bbb.mp4" />
           </div>
 
           {/* Microcopy Trust Indicators */}

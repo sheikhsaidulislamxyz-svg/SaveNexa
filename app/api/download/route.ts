@@ -47,6 +47,8 @@ async function fetchWithSsrfProtection(
     requestHeaders['Referer'] = 'https://www.facebook.com/';
   } else if (lowerUrl.includes('redd.it')) {
     requestHeaders['Referer'] = 'https://www.reddit.com/';
+  } else if (lowerUrl.includes('pinimg.com')) {
+    requestHeaders['Referer'] = 'https://www.pinterest.com/';
   }
 
   if (incomingRangeHeader) {
@@ -128,23 +130,13 @@ export async function GET(req: NextRequest): Promise<Response> {
   console.log(`[DOWNLOAD_JOB ${downloadJobId}] START mode=${mode} targetUrl=${payload.url.slice(0, 80)}`);
 
   try {
-    // 2. Fast Non-Blocking Direct CDN Redirect Mode
-    // By default for standard direct CDN streams, return immediate HTTP 302 Found redirect
-    // This completes the /api/download server function in ~15ms, freeing all server sockets instantly.
-    if (mode === 'redirect' || (mode === 'auto' && !req.headers.get('range'))) {
-      const security = validateUrlSecurity(payload.url);
-      if (security.isValid && /^https?:\/\//i.test(security.normalizedUrl)) {
-        const duration = Date.now() - reqStart;
-        console.log(`[DOWNLOAD_JOB ${downloadJobId}] REDIRECT 302 to CDN in ${duration}ms`);
-        return NextResponse.redirect(security.normalizedUrl, 302);
-      }
-    }
-
-    // 3. Fallback / Range Proxy Mode
+    // Stream directly from source CDN with Content-Disposition: attachment
+    // This provides a clean same-origin attachment download without 302 redirects or new tabs
     const incomingRange = req.headers.get('range');
     const upstreamRes = await fetchWithSsrfProtection(payload.url, incomingRange);
 
     if (!upstreamRes.ok && upstreamRes.status !== 206) {
+      await upstreamRes.body?.cancel().catch(() => {});
       if (upstreamRes.status === 403 || upstreamRes.status === 401) {
         return NextResponse.json(
           {
@@ -206,6 +198,16 @@ export async function GET(req: NextRequest): Promise<Response> {
 
     const duration = Date.now() - reqStart;
     console.log(`[DOWNLOAD_JOB ${downloadJobId}] PROXY STREAM HEADERS SENT in ${duration}ms - Content-Type: ${contentType}`);
+
+    if (req.signal) {
+      req.signal.addEventListener('abort', () => {
+        try {
+          upstreamRes.body?.cancel().catch(() => {});
+        } catch {
+          // ignore
+        }
+      });
+    }
 
     // Return streaming response (206 Partial Content or 200 OK)
     return new Response(upstreamRes.body, {
