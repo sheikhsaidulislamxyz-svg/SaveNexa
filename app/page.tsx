@@ -58,7 +58,6 @@ export default function HomePage() {
         type="WebApplication"
         title="Download Public Videos & Media Online | SaveNexa"
         description="Paste a supported public link. Save available video, audio, image, or file formats directly from your browser without accounts or software."
-        faqs={homeFaqs}
       />
 
       {/* Hero Section */}

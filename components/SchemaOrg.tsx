@@ -1,49 +1,52 @@
 import React from 'react';
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/lib/constants';
 
-interface SchemaOrgProps {
-  type?: 'WebSite' | 'WebApplication' | 'Article' | 'FAQPage';
+export interface SchemaOrgProps {
+  type?: 'Global' | 'WebSite' | 'WebApplication' | 'Article' | 'AboutPage' | 'ContactPage' | 'WebPage';
   title?: string;
   description?: string;
   url?: string;
-  faqs?: { question: string; answer: string }[];
   datePublished?: string;
   dateModified?: string;
 }
 
 export default function SchemaOrg({
-  type = 'WebSite',
+  type = 'Global',
   title = `${SITE_NAME} — Social Video & Media Downloader`,
   description = SITE_DESCRIPTION,
   url = SITE_URL,
-  faqs,
   datePublished,
   dateModified,
 }: SchemaOrgProps) {
-  const schemas: Record<string, unknown>[] = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      '@id': `${SITE_URL}/#organization`,
-      name: SITE_NAME,
-      url: SITE_URL,
-      description: SITE_DESCRIPTION,
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      '@id': `${SITE_URL}/#website`,
-      name: SITE_NAME,
-      alternateName: ['SaveNexa Media Tools', 'SaveNexa Video Downloader'],
-      url: SITE_URL,
-      description: SITE_DESCRIPTION,
-    },
-  ];
+  const schemas: Record<string, unknown>[] = [];
 
-  if (type === 'WebApplication') {
+  if (type === 'Global') {
+    // Only RootLayout emits Organization and WebSite globally once
+    schemas.push(
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        name: SITE_NAME,
+        url: SITE_URL,
+        description: SITE_DESCRIPTION,
+        logo: `${SITE_URL}/favicon.svg`,
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}/#website`,
+        name: SITE_NAME,
+        alternateName: ['SaveNexa Media Tools', 'SaveNexa Video Downloader'],
+        url: SITE_URL,
+        description: SITE_DESCRIPTION,
+        publisher: {
+          '@id': `${SITE_URL}/#organization`,
+        },
+      }
+    );
+  } else if (type === 'WebApplication') {
     schemas.push({
-      '@context': 'https://schema.org',
       '@type': 'WebApplication',
+      '@id': `${url}/#webapp`,
       name: title,
       applicationCategory: 'MultimediaApplication',
       operatingSystem: 'Any',
@@ -55,29 +58,52 @@ export default function SchemaOrg({
       },
       description,
       url,
+      provider: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+    });
+  } else if (type === 'Article') {
+    schemas.push({
+      '@type': 'Article',
+      '@id': `${url}/#article`,
+      headline: title,
+      description,
+      url,
+      datePublished: datePublished || '2026-01-01T00:00:00Z',
+      dateModified: dateModified || new Date().toISOString(),
+      mainEntityOfPage: url,
+      publisher: {
+        '@id': `${SITE_URL}/#organization`,
+      },
+      author: {
+        '@type': 'Organization',
+        name: SITE_NAME,
+        url: SITE_URL,
+      },
+    });
+  } else if (type === 'AboutPage' || type === 'ContactPage' || type === 'WebPage' || type === 'WebSite') {
+    schemas.push({
+      '@type': type === 'WebSite' ? 'WebPage' : type,
+      '@id': `${url}/#webpage`,
+      name: title,
+      description,
+      url,
+      isPartOf: {
+        '@id': `${SITE_URL}/#website`,
+      },
     });
   }
 
-  if (faqs && faqs.length > 0) {
-    schemas.push({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqs.map((faq) => ({
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: faq.answer,
-        },
-      })),
-    });
-  }
+  if (schemas.length === 0) return null;
 
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(schemas.length === 1 ? schemas[0] : { '@context': 'https://schema.org', '@graph': schemas }),
+        __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': schemas,
+        }),
       }}
     />
   );

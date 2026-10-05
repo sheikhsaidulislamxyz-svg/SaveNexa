@@ -18,6 +18,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/how-to-save-instagram-reels',
     '/how-to-download-facebook-video',
     '/how-to-save-reddit-video',
+    '/how-to-download-x-twitter-videos',
+    '/how-to-download-pinterest-videos',
     '/guides',
     '/guides/phone-video-download-guide',
     '/guides/browser-download-guide',

@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Tv, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Tv, ShieldCheck, Smartphone, Laptop, CheckCircle2, AlertCircle, ArrowRight, BookOpen } from 'lucide-react';
 import DownloaderForm from '@/components/DownloaderForm';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import FaqAccordion from '@/components/FaqAccordion';
@@ -9,88 +9,206 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Facebook Video Downloader — Save Public Videos Online',
-  description: 'Download public Facebook videos, watch clips, and FB reels in MP4 format directly in your browser without accounts or software.',
+  title: 'Facebook Video Downloader – Save Public Videos & Reels',
+  description: 'Download public Facebook videos, watch clips, and FB reels in HD MP4 format directly in your browser without accounts or software.',
   alternates: {
     canonical: '/facebook-video-downloader',
   },
   openGraph: {
-    title: 'Facebook Video Downloader — Save Public Videos Online | SaveNexa',
-    description: 'Save public Facebook videos and watch streams directly to your phone or PC.',
+    title: 'Facebook Video Downloader – Save Public Videos & Reels | SaveNexa',
+    description: 'Download public Facebook videos, reels, and watch clips directly to your phone or desktop in HD MP4.',
     url: `${SITE_URL}/facebook-video-downloader`,
   },
 };
 
 const fbFaqs = [
   {
-    question: 'How do I copy a public Facebook video link?',
-    answer: 'On desktop, right-click the video and click "Copy video URL at current time" or copy the address bar URL. On mobile, tap Share > More options > Copy link.',
+    question: 'How do I download a public Facebook video on mobile?',
+    answer: 'Tap the Share button on any public Facebook post, reel, or watch clip, tap "Copy link", paste it into SaveNexa in Safari or Chrome, and tap "Analyze & Save Media" to download the direct MP4 file.',
   },
   {
-    question: 'Can I download private Facebook videos or private group posts?',
-    answer: 'No. SaveNexa strictly analyzes publicly accessible content. Private group videos and restricted posts cannot be saved.',
+    question: 'Can I download videos from private Facebook groups or accounts?',
+    answer: 'No. SaveNexa strictly operates on public posts. Videos inside private groups, closed communities, or restricted to friends cannot be fetched.',
   },
   {
-    question: 'What video quality formats are supported?',
-    answer: 'SaveNexa resolves available HD and SD MP4 streams provided by the Facebook public delivery network.',
+    question: 'Does this support Facebook Reels and fb.watch links?',
+    answer: 'Yes. SaveNexa supports facebook.com/reel/..., fb.watch/... shortlinks, facebook.com/watch/..., and standard facebook.com/.../videos/... URLs.',
+  },
+  {
+    question: 'What video quality is available for Facebook downloads?',
+    answer: 'SaveNexa delivers the highest quality stream provided by the Facebook CDN, including 1080p Full HD and 720p HD MP4 video with synchronized audio.',
   },
 ];
 
 export default function FacebookDownloaderPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-12">
-      <Breadcrumbs
-        items={[{ name: 'Facebook Video Downloader', url: '/facebook-video-downloader' }]}
-      />
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 space-y-14">
+      <Breadcrumbs items={[{ name: 'Facebook Downloader', url: '/facebook-video-downloader' }]} />
 
       <SchemaOrg
         type="WebApplication"
-        title="Facebook Video Downloader for Public Links"
+        title="Facebook Video Downloader – Save Public Videos & Reels | SaveNexa"
         description="Download public Facebook videos, watch clips, and FB reels in MP4 format directly in your browser."
         url={`${SITE_URL}/facebook-video-downloader`}
-        faqs={fbFaqs}
       />
 
+      {/* Hero Section & Downloader Island (Above the fold) */}
       <section className="text-center space-y-4">
-        <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full">
+        <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
           <Tv className="w-3.5 h-3.5 text-emerald-600" />
           <span>Facebook Public Media Utility</span>
         </div>
 
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
           Facebook Video Downloader for Public Links
         </h1>
 
-        <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto leading-relaxed">
-          Save public Facebook Watch videos, page posts, and public reels directly in standard MP4 format.
+        <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
+          Save public Facebook videos, Watch clips, and FB Reels directly in your browser with high-definition MP4 quality.
         </p>
 
         <div className="pt-2">
           <DownloaderForm
-            placeholderText="Paste Facebook video URL (e.g. https://www.facebook.com/watch/?v=...)"
-            defaultSampleUrl="https://www.facebook.com/watch/?v=10156382072120000"
+            placeholderText="Paste Facebook Video URL (e.g. https://www.facebook.com/.../videos/...)"
+            defaultSampleUrl="https://www.facebook.com/watch/?v=123456789012345"
           />
         </div>
       </section>
 
-      {/* Instructions */}
-      <section className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-        <h2 className="text-lg font-bold text-slate-900">Supported Facebook Video Types</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm text-slate-700">
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-            <span className="font-semibold text-slate-900 block mb-1">Facebook Watch Videos</span>
-            <code className="text-slate-600 break-all">https://www.facebook.com/watch/?v=123456789...</code>
+      {/* Supported Links Section */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          Supported Facebook Video Formats
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Facebook Watch & Post Videos</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Supports <code>facebook.com/watch/?v=...</code>, standard post videos, and <code>fb.watch/...</code> shortlinks.
+            </p>
           </div>
-          <div className="p-3 bg-slate-50 rounded-xl border border-slate-100">
-            <span className="font-semibold text-slate-900 block mb-1">Mobile & Short Links</span>
-            <code className="text-slate-600 break-all">https://fb.watch/... / https://m.facebook.com/...</code>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Facebook Reels (Vertical Clips)</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Supports public <code>facebook.com/reel/...</code> short-form video clips with synchronized stereo audio.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* Device Instructions */}
       <section className="space-y-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+        <div className="space-y-2">
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+            How to Download Public Facebook Videos
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            Follow these simple steps to save Facebook videos directly to your phone, tablet, or desktop computer:
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-3">
+            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-800">
+              <Smartphone className="w-5 h-5 text-emerald-600" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900">iPhone & iPad (iOS Safari)</h3>
+            <ol className="text-xs text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+              <li>In the Facebook app, tap <strong>Share</strong> on the post and choose <strong>Copy link</strong>.</li>
+              <li>Open <strong>Safari</strong>, paste the link into SaveNexa, and tap <strong>Analyze</strong>.</li>
+              <li>Tap <strong>Download</strong>. Safari saves the MP4 file directly to your Files app, where you can save to Photos.</li>
+            </ol>
+          </div>
+
+          <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-3">
+            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-800">
+              <Smartphone className="w-5 h-5 text-emerald-600" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900">Android (Chrome / Firefox)</h3>
+            <ol className="text-xs text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+              <li>Tap the three dots or <strong>Share</strong> on the video and copy the URL.</li>
+              <li>Open Chrome or your mobile browser, paste into SaveNexa, and tap Analyze.</li>
+              <li>Tap <strong>Download</strong> to save the video straight into your Downloads folder.</li>
+            </ol>
+          </div>
+
+          <div className="p-5 bg-white rounded-2xl border border-slate-200 space-y-3">
+            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-800">
+              <Laptop className="w-5 h-5 text-emerald-600" />
+            </div>
+            <h3 className="text-base font-bold text-slate-900">Windows PC & Mac</h3>
+            <ol className="text-xs text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+              <li>Copy the Facebook video or reel URL from your browser address bar.</li>
+              <li>Paste the URL into SaveNexa and click <strong>Analyze & Save Media</strong>.</li>
+              <li>Choose your preferred MP4 resolution to download the video file directly to your hard drive.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* Troubleshooting Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          Why a Facebook Video Download May Fail
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900">Private Group or Friends-Only Post</div>
+            <p className="text-slate-600 leading-relaxed">
+              Posts restricted to private group members or specific friend lists cannot be retrieved by our public scraper.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900">Age or Location Gate</div>
+            <p className="text-slate-600 leading-relaxed">
+              Videos flagged with 18+ age restrictions require logged-in verification and are shielded by Facebook.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Step-by-Step Guide Contextual Link */}
+      <section className="p-6 bg-slate-50 rounded-2xl border border-slate-200 space-y-4">
+        <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
+          <BookOpen className="w-5 h-5 text-emerald-600" />
+          <span>Detailed Facebook Download Tutorial</span>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Need step-by-step guidance on copying clean Facebook URLs and resolving common mobile link issues? Check out our dedicated tutorial:
+        </p>
+        <div className="pt-1">
+          <Link
+            href="/how-to-download-facebook-video"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white rounded-xl border border-slate-200 hover:border-slate-300 text-xs font-semibold text-slate-900 transition-colors shadow-sm"
+          >
+            <span>Read: How to Download Facebook Videos & Watch Clips</span>
+            <ArrowRight className="w-3.5 h-3.5 text-slate-500" />
+          </Link>
+        </div>
+      </section>
+
+      {/* Limitations Notice */}
+      <section className="p-5 bg-amber-50/60 border border-amber-200/80 rounded-2xl space-y-3">
+        <div className="flex items-center gap-2 text-amber-900 font-bold text-sm">
+          <AlertCircle className="w-4 h-4 text-amber-600" />
+          <span>Responsible Use & Privacy Limitations</span>
+        </div>
+        <p className="text-xs text-amber-900/80 leading-relaxed">
+          SaveNexa only fetches publicly visible videos. Content from private groups, personal accounts with restricted audience settings, or age-restricted posts cannot be accessed.
+        </p>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="space-y-6">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
           Frequently Asked Questions
         </h2>
         <FaqAccordion items={fbFaqs} />
@@ -99,28 +217,28 @@ export default function FacebookDownloaderPage() {
       {/* Related Tools */}
       <section className="pt-6 border-t border-slate-200 space-y-4">
         <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-          Related Tools & Guides
+          Related Download Tools
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link
-            href="/how-to-download-facebook-video"
-            className="p-3 bg-white rounded-xl border border-slate-200 hover:border-slate-300 flex items-center justify-between text-xs font-medium text-slate-800"
+            href="/instagram-reels-downloader"
+            className="p-3.5 bg-white rounded-xl border border-slate-200 hover:border-slate-300 flex items-center justify-between text-xs font-medium text-slate-800 transition-colors"
           >
-            <span>Facebook Download Guide</span>
+            <span>Instagram Reels Downloader</span>
             <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
           </Link>
           <Link
             href="/tiktok-video-downloader"
-            className="p-3 bg-white rounded-xl border border-slate-200 hover:border-slate-300 flex items-center justify-between text-xs font-medium text-slate-800"
+            className="p-3.5 bg-white rounded-xl border border-slate-200 hover:border-slate-300 flex items-center justify-between text-xs font-medium text-slate-800 transition-colors"
           >
-            <span>TikTok Video Downloader</span>
+            <span>TikTok Downloader</span>
             <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
           </Link>
           <Link
-            href="/reddit-video-downloader"
-            className="p-3 bg-white rounded-xl border border-slate-200 hover:border-slate-300 flex items-center justify-between text-xs font-medium text-slate-800"
+            href="/online-video-downloader"
+            className="p-3.5 bg-white rounded-xl border border-slate-200 hover:border-slate-300 flex items-center justify-between text-xs font-medium text-slate-800 transition-colors"
           >
-            <span>Reddit Downloader</span>
+            <span>Direct Video Downloader</span>
             <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
           </Link>
         </div>

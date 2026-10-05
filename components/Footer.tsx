@@ -71,13 +71,13 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/guides/phone-video-download-guide" className="hover:text-white transition-colors">
-                  Mobile Download Guide (iOS & Android)
+                <Link href="/how-to-download-x-twitter-videos" className="hover:text-white transition-colors">
+                  How to Download X / Twitter Videos
                 </Link>
               </li>
               <li>
-                <Link href="/guides/browser-download-guide" className="hover:text-white transition-colors">
-                  Browser Download Tips
+                <Link href="/how-to-download-pinterest-videos" className="hover:text-white transition-colors">
+                  How to Save Pinterest Videos
                 </Link>
               </li>
             </ul>
