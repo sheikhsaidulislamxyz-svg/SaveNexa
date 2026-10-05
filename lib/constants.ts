@@ -21,7 +21,7 @@ export function getSiteUrl(): string {
 export const SITE_URL = getSiteUrl();
 
 export const MAX_URL_LENGTH = 4096;
-export const MAX_ANALYZE_ATTEMPTS_PER_WINDOW = 15;
+export const MAX_ANALYZE_ATTEMPTS_PER_WINDOW = 60;
 export const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
 export const FETCH_TIMEOUT_MS = 8000; // 8 seconds
 

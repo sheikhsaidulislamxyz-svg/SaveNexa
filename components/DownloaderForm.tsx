@@ -14,6 +14,7 @@ import {
   Share2,
   Film,
   RotateCcw,
+  Clock,
 } from 'lucide-react';
 import { detectPlatformFromUrl } from '@/lib/providers/registry';
 import { AnalyzeApiResponse, MediaResult, MediaFormat } from '@/lib/types';
@@ -24,20 +25,50 @@ interface DownloaderFormProps {
   defaultSampleUrl?: string;
 }
 
+// Request-scoped job state
+interface AnalyzeJobState {
+  jobId: string | null;
+  status: 'idle' | 'analyzing' | 'success' | 'error' | 'timed_out';
+  errorMsg: string | null;
+  result: MediaResult | null;
+}
+
+interface DownloadJobState {
+  downloadId: string | null;
+  status: 'idle' | 'preparing' | 'started' | 'error';
+  statusMsg: string | null;
+}
+
+const CLIENT_ANALYZE_TIMEOUT_MS = 25000; // 25s client-side hard timeout
+
 export default function DownloaderForm({
   placeholderText = 'Paste a TikTok, Instagram, Facebook, X, Reddit, Pinterest, or direct media URL...',
   defaultSampleUrl,
 }: DownloaderFormProps) {
   const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<MediaResult | null>(null);
+  
+  // Independent Analyze State (Job-scoped)
+  const [analyzeJob, setAnalyzeJob] = useState<AnalyzeJobState>({
+    jobId: null,
+    status: 'idle',
+    errorMsg: null,
+    result: null,
+  });
+
+  // Independent Download State (Job-scoped, separate from Analyze)
+  const [downloadJob, setDownloadJob] = useState<DownloadJobState>({
+    downloadId: null,
+    status: 'idle',
+    statusMsg: null,
+  });
+
   const [selectedFormatId, setSelectedFormatId] = useState<string | null>(null);
-  const [downloadStatus, setDownloadStatus] = useState<string | null>(null);
-  const [isDownloading, setIsDownloading] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
   const [pasteError, setPasteError] = useState<string | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const activeAbortControllerRef = useRef<AbortController | null>(null);
+  const activeTimeoutTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Derive detected platform as user types
   const detectedPlatform = useMemo(() => {
@@ -52,7 +83,7 @@ export default function DownloaderForm({
         const text = await navigator.clipboard.readText();
         if (text) {
           setUrl(text.trim());
-          setError(null);
+          setPasteError(null);
           if (/^https?:\/\//i.test(text.trim()) || text.includes('.')) {
             triggerAnalyze(text.trim());
           }
@@ -69,15 +100,49 @@ export default function DownloaderForm({
   const triggerAnalyze = async (urlToAnalyze: string) => {
     const trimmed = urlToAnalyze.trim();
     if (!trimmed) {
-      setError('Please paste or enter a public media URL first.');
+      setAnalyzeJob({
+        jobId: null,
+        status: 'error',
+        errorMsg: 'Please paste or enter a public media URL first.',
+        result: null,
+      });
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-    setResult(null);
+    // 1. Cancel previous pending analyze job & clear its timeout
+    if (activeAbortControllerRef.current) {
+      activeAbortControllerRef.current.abort('New analysis job initiated');
+    }
+    if (activeTimeoutTimerRef.current) {
+      clearTimeout(activeTimeoutTimerRef.current);
+    }
+
+    const newJobId = `job_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const controller = new AbortController();
+    activeAbortControllerRef.current = controller;
+
+    // Set analyzing state immediately
+    setAnalyzeJob({
+      jobId: newJobId,
+      status: 'analyzing',
+      errorMsg: null,
+      result: null,
+    });
     setPasteError(null);
-    setDownloadStatus(null);
+    setDownloadJob({ downloadId: null, status: 'idle', statusMsg: null });
+
+    // 2. Setup Client-Side Hard Timeout (Guarantees spinner NEVER spins endlessly)
+    activeTimeoutTimerRef.current = setTimeout(() => {
+      if (activeAbortControllerRef.current === controller) {
+        controller.abort('CLIENT_HARD_TIMEOUT');
+        setAnalyzeJob({
+          jobId: newJobId,
+          status: 'timed_out',
+          errorMsg: 'Analysis request timed out after 25 seconds. The source platform took too long to respond. Please try again.',
+          result: null,
+        });
+      }
+    }, CLIENT_ANALYZE_TIMEOUT_MS);
 
     try {
       const res = await fetch('/api/analyze', {
@@ -86,26 +151,57 @@ export default function DownloaderForm({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ url: trimmed }),
+        signal: controller.signal,
       });
 
-      const data: AnalyzeApiResponse = await res.json();
+      if (activeTimeoutTimerRef.current) {
+        clearTimeout(activeTimeoutTimerRef.current);
+      }
+
+      const data: AnalyzeApiResponse & { jobId?: string } = await res.json();
 
       if (!data.ok) {
-        setError(
-          data.message ||
-          'Could not analyze this link. Please make sure it is a public, accessible URL containing a video or audio stream.'
-        );
+        setAnalyzeJob({
+          jobId: data.jobId || newJobId,
+          status: 'error',
+          errorMsg:
+            data.message ||
+            'Could not analyze this link. Please make sure it is a public, accessible URL containing a video or audio stream.',
+          result: null,
+        });
       } else {
-        setResult(data);
+        setAnalyzeJob({
+          jobId: data.jobId || newJobId,
+          status: 'success',
+          errorMsg: null,
+          result: data,
+        });
+
         if (data.formats && data.formats.length > 0) {
           const defaultFormat = data.formats.find((f) => f.isDownloadable) || data.formats[0];
           setSelectedFormatId(defaultFormat.id);
         }
       }
-    } catch {
-      setError('A network connection error occurred. Please check your connection and try again.');
+    } catch (err: unknown) {
+      if (activeTimeoutTimerRef.current) {
+        clearTimeout(activeTimeoutTimerRef.current);
+      }
+
+      if (err instanceof Error && err.name === 'AbortError') {
+        // Interrupted cleanly by a newer job or client timeout, ignore duplicate error
+        return;
+      }
+
+      setAnalyzeJob({
+        jobId: newJobId,
+        status: 'error',
+        errorMsg: 'A network connection error occurred. Please check your connection and try again.',
+        result: null,
+      });
     } finally {
-      setIsLoading(false);
+      if (activeAbortControllerRef.current === controller) {
+        activeAbortControllerRef.current = null;
+      }
     }
   };
 
@@ -115,19 +211,24 @@ export default function DownloaderForm({
   };
 
   const handleClear = () => {
+    if (activeAbortControllerRef.current) {
+      activeAbortControllerRef.current.abort('User cleared input');
+    }
+    if (activeTimeoutTimerRef.current) {
+      clearTimeout(activeTimeoutTimerRef.current);
+    }
     setUrl('');
-    setError(null);
-    setResult(null);
+    setAnalyzeJob({ jobId: null, status: 'idle', errorMsg: null, result: null });
+    setDownloadJob({ downloadId: null, status: 'idle', statusMsg: null });
     setPasteError(null);
-    setDownloadStatus(null);
     inputRef.current?.focus();
   };
 
   const handleCopySource = async () => {
-    if (!result) return;
+    if (!analyzeJob.result) return;
     try {
       if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(result.sourceUrl);
+        await navigator.clipboard.writeText(analyzeJob.result.sourceUrl);
         setCopiedLink(true);
         setTimeout(() => setCopiedLink(false), 2500);
       }
@@ -137,40 +238,57 @@ export default function DownloaderForm({
   };
 
   const activeFormat = useMemo(() => {
-    if (!result || !result.formats) return null;
-    return result.formats.find((f) => f.id === selectedFormatId) || result.formats[0] || null;
-  }, [result, selectedFormatId]);
+    if (!analyzeJob.result || !analyzeJob.result.formats) return null;
+    return analyzeJob.result.formats.find((f) => f.id === selectedFormatId) || analyzeJob.result.formats[0] || null;
+  }, [analyzeJob.result, selectedFormatId]);
 
   const handleExecuteDownload = async (format: MediaFormat) => {
     if (!format || !format.isDownloadable || !format.downloadUrl) {
-      setDownloadStatus('Direct download is currently unavailable for this media stream.');
+      setDownloadJob({
+        downloadId: format.downloadId || 'err',
+        status: 'error',
+        statusMsg: 'Direct download is currently unavailable for this media stream.',
+      });
       return;
     }
 
-    setIsDownloading(true);
-    setDownloadStatus('Preparing download...');
+    setDownloadJob({
+      downloadId: format.downloadId || 'dl_start',
+      status: 'preparing',
+      statusMsg: 'Preparing download stream...',
+    });
 
     try {
-      const downloadEndpoint = format.downloadUrl;
+      const downloadEndpoint = `${format.downloadUrl}&mode=redirect`;
 
-      // Trigger browser download via internal /api/download?id=SIGNED_TOKEN endpoint
+      // Trigger download using direct ephemeral anchor in background window/tab
+      // so primary page tab context stays 100% unlocked and free
       const a = document.createElement('a');
       a.href = downloadEndpoint;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
       a.style.display = 'none';
-
-      if (format.ext) {
-        a.download = `savenexa-media.${format.ext}`;
-      }
 
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
 
-      setDownloadStatus('Download started! Check your browser downloads folder.');
+      setTimeout(() => {
+        if (document.body.contains(a)) {
+          document.body.removeChild(a);
+        }
+      }, 500);
+
+      setDownloadJob({
+        downloadId: format.downloadId || 'dl_started',
+        status: 'started',
+        statusMsg: 'Download started! Check your browser downloads folder.',
+      });
     } catch {
-      setDownloadStatus('Download failed to initialize. Please try again.');
-    } finally {
-      setTimeout(() => setIsDownloading(false), 2000);
+      setDownloadJob({
+        downloadId: format.downloadId || 'dl_err',
+        status: 'error',
+        statusMsg: 'Download failed to initialize. Please try again.',
+      });
     }
   };
 
@@ -179,6 +297,8 @@ export default function DownloaderForm({
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
+
+  const isAnalyzing = analyzeJob.status === 'analyzing';
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-4">
@@ -192,19 +312,18 @@ export default function DownloaderForm({
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder={placeholderText}
-              disabled={isLoading}
-              className="w-full pl-3 pr-24 py-3.5 sm:py-4 text-sm sm:text-base text-slate-900 bg-transparent placeholder-slate-400 focus:outline-none disabled:opacity-60"
+              className="w-full pl-3 pr-24 py-3.5 sm:py-4 text-sm sm:text-base text-slate-900 bg-transparent placeholder-slate-400 focus:outline-none"
               aria-label="Public media URL to analyze"
               required
             />
 
             {/* In-box Actions */}
             <div className="absolute right-2 flex items-center gap-1.5">
-              {url && !isLoading && (
+              {url && (
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100 transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-100 transition-colors cursor-pointer"
                   aria-label="Clear input text"
                 >
                   <X className="w-4 h-4" />
@@ -214,8 +333,7 @@ export default function DownloaderForm({
               <button
                 type="button"
                 onClick={handlePaste}
-                disabled={isLoading}
-                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors active:scale-95 disabled:opacity-50"
+                className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors active:scale-95 cursor-pointer"
                 title="Paste from clipboard"
               >
                 <Clipboard className="w-3.5 h-3.5" />
@@ -239,10 +357,10 @@ export default function DownloaderForm({
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-1">
             <button
               type="submit"
-              disabled={isLoading || !url.trim()}
+              disabled={!url.trim()}
               className="w-full sm:flex-1 h-12 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
-              {isLoading ? (
+              {isAnalyzing ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin text-emerald-400" />
                   <span>Extracting media stream...</span>
@@ -265,7 +383,7 @@ export default function DownloaderForm({
       </div>
 
       {/* Quick sample link helper */}
-      {defaultSampleUrl && !result && (
+      {defaultSampleUrl && analyzeJob.status === 'idle' && (
         <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
           <span>Need a quick test?</span>
           <button
@@ -281,17 +399,27 @@ export default function DownloaderForm({
         </div>
       )}
 
-      {/* Error State */}
-      {error && !isLoading && (
+      {/* Error & Timeout State */}
+      {(analyzeJob.status === 'error' || analyzeJob.status === 'timed_out') && (
         <div
           role="alert"
           className="bg-red-50/80 border border-red-200 rounded-2xl p-4 text-sm text-red-900 space-y-2 animate-in fade-in duration-200"
         >
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            {analyzeJob.status === 'timed_out' ? (
+              <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            )}
             <div className="space-y-1">
-              <h3 className="font-semibold text-red-950">We couldn&apos;t analyze this link</h3>
-              <p className="text-xs sm:text-sm text-red-800 leading-relaxed">{error}</p>
+              <h3 className="font-semibold text-red-950">
+                {analyzeJob.status === 'timed_out'
+                  ? 'Request timed out'
+                  : "We couldn't analyze this link"}
+              </h3>
+              <p className="text-xs sm:text-sm text-red-800 leading-relaxed">
+                {analyzeJob.errorMsg}
+              </p>
             </div>
           </div>
           <div className="pt-2 border-t border-red-100 flex flex-wrap items-center gap-3 text-xs text-red-700 pl-8">
@@ -301,14 +429,14 @@ export default function DownloaderForm({
               onClick={() => triggerAnalyze(url)}
               className="font-medium underline hover:text-red-950 inline-flex items-center gap-1 cursor-pointer"
             >
-              <RotateCcw className="w-3 h-3" /> Retry
+              <RotateCcw className="w-3 h-3" /> Retry Analysis
             </button>
           </div>
         </div>
       )}
 
       {/* Success Result Card */}
-      {result && !isLoading && (
+      {analyzeJob.status === 'success' && analyzeJob.result && (
         <div
           aria-live="polite"
           className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-md space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300"
@@ -319,22 +447,23 @@ export default function DownloaderForm({
               Video Preview
             </div>
             <div className="relative w-full aspect-video bg-slate-900 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center border border-slate-800">
-              {result.previewVideoUrl ? (
+              {analyzeJob.result.previewVideoUrl ? (
                 <video
-                  src={result.previewVideoUrl}
-                  poster={result.thumbnailUrl}
+                  key={analyzeJob.result.previewVideoUrl}
+                  src={analyzeJob.result.previewVideoUrl}
+                  poster={analyzeJob.result.thumbnailUrl}
                   controls
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   className="w-full h-full object-contain"
                 >
                   Your browser does not support video playback preview.
                 </video>
-              ) : result.thumbnailUrl ? (
+              ) : analyzeJob.result.thumbnailUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={result.thumbnailUrl}
-                  alt={result.title || 'Media thumbnail'}
+                  src={analyzeJob.result.thumbnailUrl}
+                  alt={analyzeJob.result.title || 'Media thumbnail'}
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover"
                 />
@@ -350,27 +479,27 @@ export default function DownloaderForm({
           {/* Media Information Header */}
           <div className="space-y-2 pt-1 border-t border-slate-100">
             <div className="flex items-center gap-2 text-xs text-slate-500">
-              <span className="font-semibold text-slate-800">{result.platformName}</span>
+              <span className="font-semibold text-slate-800">{analyzeJob.result.platformName}</span>
               <span aria-hidden="true">·</span>
-              <span className="capitalize">{result.type}</span>
-              {result.durationSeconds ? (
+              <span className="capitalize">{analyzeJob.result.type}</span>
+              {analyzeJob.result.durationSeconds ? (
                 <>
                   <span aria-hidden="true">·</span>
                   <span className="tabular-nums">
-                    {Math.floor(result.durationSeconds / 60)}:
-                    {String(Math.floor(result.durationSeconds % 60)).padStart(2, '0')}
+                    {Math.floor(analyzeJob.result.durationSeconds / 60)}:
+                    {String(Math.floor(analyzeJob.result.durationSeconds % 60)).padStart(2, '0')}
                   </span>
                 </>
               ) : null}
             </div>
 
             <h2 className="text-base sm:text-lg font-bold text-slate-900 leading-snug line-clamp-2">
-              {result.title}
+              {analyzeJob.result.title}
             </h2>
 
-            {result.author && (
+            {analyzeJob.result.author && (
               <p className="text-xs text-slate-600">
-                Posted by <span className="font-medium text-slate-900">{result.author}</span>
+                Posted by <span className="font-medium text-slate-900">{analyzeJob.result.author}</span>
               </p>
             )}
           </div>
@@ -382,12 +511,12 @@ export default function DownloaderForm({
                 Available Quality
               </span>
               <span className="text-[11px] text-slate-400">
-                {result.formats.length} stream option{result.formats.length > 1 ? 's' : ''}
+                {analyzeJob.result.formats.length} stream option{analyzeJob.result.formats.length > 1 ? 's' : ''}
               </span>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              {result.formats.map((format) => {
+              {analyzeJob.result.formats.map((format) => {
                 const isSelected = format.id === selectedFormatId;
                 return (
                   <button
@@ -395,7 +524,7 @@ export default function DownloaderForm({
                     type="button"
                     onClick={() => {
                       setSelectedFormatId(format.id);
-                      setDownloadStatus(null);
+                      setDownloadJob({ downloadId: null, status: 'idle', statusMsg: null });
                     }}
                     className={`px-3.5 py-2 text-xs font-semibold rounded-xl border transition-all cursor-pointer ${
                       isSelected
@@ -428,16 +557,15 @@ export default function DownloaderForm({
                   ) : null}
                 </div>
 
-                {/* PRIMARY DOWNLOAD BUTTON (TRIPPED TO DIRECT BACKEND DOWNLOAD ROUTE) */}
+                {/* PRIMARY DOWNLOAD BUTTON */}
                 {activeFormat.isDownloadable ? (
                   <div className="space-y-2">
                     <button
                       type="button"
-                      disabled={isDownloading}
                       onClick={() => handleExecuteDownload(activeFormat)}
-                      className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md active:scale-[0.99] transition-all disabled:opacity-50 cursor-pointer"
+                      className="w-full h-12 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-md active:scale-[0.99] transition-all cursor-pointer"
                     >
-                      {isDownloading ? (
+                      {downloadJob.status === 'preparing' ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin text-slate-950" />
                           <span>Preparing Download...</span>
@@ -450,9 +578,13 @@ export default function DownloaderForm({
                       )}
                     </button>
 
-                    {downloadStatus && (
-                      <div className="text-xs text-center font-medium text-emerald-800 bg-emerald-50 p-2 rounded-lg border border-emerald-200 animate-in fade-in">
-                        {downloadStatus}
+                    {downloadJob.statusMsg && (
+                      <div className={`text-xs text-center font-medium p-2 rounded-lg border animate-in fade-in ${
+                        downloadJob.status === 'error'
+                          ? 'text-red-800 bg-red-50 border-red-200'
+                          : 'text-emerald-800 bg-emerald-50 border-emerald-200'
+                      }`}>
+                        {downloadJob.statusMsg}
                       </div>
                     )}
                   </div>
@@ -473,7 +605,7 @@ export default function DownloaderForm({
             <button
               type="button"
               onClick={handleCopySource}
-              className="inline-flex items-center gap-1.5 text-slate-700 hover:text-slate-900 font-medium py-1 px-2 rounded-md hover:bg-slate-100 transition-colors"
+              className="inline-flex items-center gap-1.5 text-slate-700 hover:text-slate-900 font-medium py-1 px-2 rounded-md hover:bg-slate-100 transition-colors cursor-pointer"
             >
               {copiedLink ? (
                 <>
@@ -489,7 +621,7 @@ export default function DownloaderForm({
             </button>
 
             <a
-              href={result.sourceUrl}
+              href={analyzeJob.result.sourceUrl}
               target="_blank"
               rel="noreferrer"
               className="text-[11px] text-slate-500 hover:text-slate-800 inline-flex items-center gap-1"

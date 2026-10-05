@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyDownloadToken } from '@/lib/tokens';
 import { validateUrlSecurity } from '@/lib/security';
-import { ERROR_CODES, ERROR_MESSAGES, FETCH_TIMEOUT_MS } from '@/lib/constants';
+import { ERROR_CODES, ERROR_MESSAGES } from '@/lib/constants';
 
 export const runtime = 'nodejs';
 
@@ -23,7 +23,7 @@ async function fetchWithSsrfProtection(
   }
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS * 2);
+  const timeoutId = setTimeout(() => controller.abort(), 12000); // 12s connection/startup timeout for proxy stream
 
   const requestHeaders: Record<string, string> = {
     'User-Agent':
@@ -86,14 +86,19 @@ async function fetchWithSsrfProtection(
 }
 
 export async function GET(req: NextRequest): Promise<Response> {
+  const reqStart = Date.now();
   const url = new URL(req.url);
   const id = url.searchParams.get('id') || url.searchParams.get('token');
+  const mode = url.searchParams.get('mode') || 'auto'; // 'auto' | 'redirect' | 'proxy'
+
+  const downloadJobId = `dl_${reqStart}_${Math.random().toString(36).substring(2, 8)}`;
 
   // 1. Validate token
   if (!id) {
     return NextResponse.json(
       {
         ok: false,
+        jobId: downloadJobId,
         code: ERROR_CODES.INVALID_URL,
         message: 'Missing download token identifier.',
       },
@@ -104,9 +109,11 @@ export async function GET(req: NextRequest): Promise<Response> {
   const verification = verifyDownloadToken(id);
   if (!verification.valid || !verification.payload) {
     const isExpired = verification.error?.includes('expired');
+    console.warn(`[DOWNLOAD_JOB ${downloadJobId}] Invalid or expired token: ${verification.error}`);
     return NextResponse.json(
       {
         ok: false,
+        jobId: downloadJobId,
         code: isExpired ? ERROR_CODES.MEDIA_EXPIRED : ERROR_CODES.INVALID_URL,
         message: verification.error || 'Invalid or expired download token.',
       },
@@ -118,12 +125,23 @@ export async function GET(req: NextRequest): Promise<Response> {
   }
 
   const { payload } = verification;
+  console.log(`[DOWNLOAD_JOB ${downloadJobId}] START mode=${mode} targetUrl=${payload.url.slice(0, 80)}`);
 
   try {
-    // 2. Extract Range header from incoming client request
-    const incomingRange = req.headers.get('range');
+    // 2. Fast Non-Blocking Direct CDN Redirect Mode
+    // By default for standard direct CDN streams, return immediate HTTP 302 Found redirect
+    // This completes the /api/download server function in ~15ms, freeing all server sockets instantly.
+    if (mode === 'redirect' || (mode === 'auto' && !req.headers.get('range'))) {
+      const security = validateUrlSecurity(payload.url);
+      if (security.isValid && /^https?:\/\//i.test(security.normalizedUrl)) {
+        const duration = Date.now() - reqStart;
+        console.log(`[DOWNLOAD_JOB ${downloadJobId}] REDIRECT 302 to CDN in ${duration}ms`);
+        return NextResponse.redirect(security.normalizedUrl, 302);
+      }
+    }
 
-    // 3. Fetch media from origin CDN with SSRF protection and redirect validation
+    // 3. Fallback / Range Proxy Mode
+    const incomingRange = req.headers.get('range');
     const upstreamRes = await fetchWithSsrfProtection(payload.url, incomingRange);
 
     if (!upstreamRes.ok && upstreamRes.status !== 206) {
@@ -131,6 +149,7 @@ export async function GET(req: NextRequest): Promise<Response> {
         return NextResponse.json(
           {
             ok: false,
+            jobId: downloadJobId,
             code: ERROR_CODES.PRIVATE_OR_RESTRICTED_SOURCE,
             message: 'The source media stream link has restricted access or expired.',
           },
@@ -141,6 +160,7 @@ export async function GET(req: NextRequest): Promise<Response> {
         return NextResponse.json(
           {
             ok: false,
+            jobId: downloadJobId,
             code: ERROR_CODES.NO_MEDIA_FOUND,
             message: 'The source media file was not found on the origin server.',
           },
@@ -150,6 +170,7 @@ export async function GET(req: NextRequest): Promise<Response> {
       return NextResponse.json(
         {
           ok: false,
+          jobId: downloadJobId,
           code: ERROR_CODES.SOURCE_UNAVAILABLE,
           message: `Source CDN returned HTTP ${upstreamRes.status}.`,
         },
@@ -157,7 +178,7 @@ export async function GET(req: NextRequest): Promise<Response> {
       );
     }
 
-    // 4. Construct download headers
+    // Construct download headers
     const contentType =
       payload.mime ||
       upstreamRes.headers.get('content-type') ||
@@ -183,18 +204,25 @@ export async function GET(req: NextRequest): Promise<Response> {
       responseHeaders.set('Content-Range', contentRange);
     }
 
+    const duration = Date.now() - reqStart;
+    console.log(`[DOWNLOAD_JOB ${downloadJobId}] PROXY STREAM HEADERS SENT in ${duration}ms - Content-Type: ${contentType}`);
+
     // Return streaming response (206 Partial Content or 200 OK)
     return new Response(upstreamRes.body, {
       status: upstreamRes.status,
       headers: responseHeaders,
     });
   } catch (error: unknown) {
+    const duration = Date.now() - reqStart;
     const errorMsg = error instanceof Error ? error.message : 'Failed to retrieve media stream.';
     const isSsrf = errorMsg.includes('SSRF');
+
+    console.error(`[DOWNLOAD_JOB ${downloadJobId}] EXCEPTION in ${duration}ms:`, errorMsg);
 
     return NextResponse.json(
       {
         ok: false,
+        jobId: downloadJobId,
         code: isSsrf ? ERROR_CODES.SSRF_BLOCKED : ERROR_CODES.SOURCE_UNAVAILABLE,
         message: isSsrf
           ? 'Access to this download target is blocked for security.'

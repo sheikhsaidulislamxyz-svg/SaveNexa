@@ -18,8 +18,11 @@ export async function executeOpenSourceBackendExtraction(
   for (const backendHost of PUBLIC_OPEN_SOURCE_BACKENDS) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6000);
-      const signal = context.signal ? AbortSignal.any([context.signal, controller.signal]) : controller.signal;
+      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const signal =
+        context.signal && typeof AbortSignal !== 'undefined' && 'any' in AbortSignal
+          ? AbortSignal.any([context.signal, controller.signal])
+          : controller.signal;
 
       const payload = {
         url: cleanUrl,
