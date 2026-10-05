@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Download, Menu, X, ArrowUpRight } from 'lucide-react';
 import { SITE_NAME, SUPPORTED_PLATFORMS } from '@/lib/constants';
 
@@ -11,12 +12,12 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-2">
-        {/* Zone 1: Single text element wordmark */}
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center transition-transform group-hover:scale-105">
-            <Download className="w-4 h-4 text-emerald-400" />
+        {/* Zone 1: Brand wordmark & icon */}
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+          <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center transition-transform group-hover:scale-105 border border-slate-200 shadow-sm bg-slate-900">
+            <Image src="/favicon.svg" alt="SaveNexa Logo" width={32} height={32} className="w-8 h-8 object-cover" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-slate-900">{SITE_NAME}</span>
+          <span className="text-xl font-extrabold tracking-tight text-slate-900">SaveNexa</span>
         </Link>
 
         {/* Zone 2: All 6 core platforms + Guides + About navigation links */}

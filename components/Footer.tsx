@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Download, ShieldCheck, Heart } from 'lucide-react';
 import { SITE_NAME, SITE_TAGLINE, SUPPORTED_PLATFORMS } from '@/lib/constants';
 
@@ -10,9 +11,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
           {/* Col 1: Brand & Mission */}
           <div className="space-y-4 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 text-white">
-              <div className="w-7 h-7 rounded-lg bg-white/10 text-white flex items-center justify-center">
-                <Download className="w-4 h-4 text-emerald-400" />
+            <Link href="/" className="flex items-center gap-2.5 text-white">
+              <div className="w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center border border-slate-800 bg-slate-900">
+                <Image src="/favicon.svg" alt="SaveNexa Logo" width={28} height={28} className="w-7 h-7 object-cover" />
               </div>
               <span className="text-lg font-bold tracking-tight text-white">{SITE_NAME}</span>
             </Link>

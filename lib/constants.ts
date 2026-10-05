@@ -1,6 +1,6 @@
 export const SITE_NAME = 'SaveNexa';
-export const SITE_TAGLINE = 'Social Video & Media Downloader';
-export const SITE_DESCRIPTION = 'Download public videos and media from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, mobile-friendly and easy to use.';
+export const SITE_TAGLINE = 'Free Video Downloader';
+export const SITE_DESCRIPTION = 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.';
 export function getSiteUrl(): string {
   // 1. Check Vercel automatic system variable
   const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;

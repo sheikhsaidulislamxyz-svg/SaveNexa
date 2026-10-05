@@ -1,4 +1,5 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   ShieldCheck,
@@ -16,7 +17,35 @@ import PlatformCard from '@/components/PlatformCard';
 import FaqAccordion from '@/components/FaqAccordion';
 import AdSlot from '@/components/AdSlot';
 import SchemaOrg from '@/components/SchemaOrg';
-import { SUPPORTED_PLATFORMS, SITE_NAME } from '@/lib/constants';
+import { SUPPORTED_PLATFORMS, SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/lib/constants';
+
+export const metadata: Metadata = {
+  title: 'Free Video Downloader for TikTok, Instagram & More',
+  description: 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'Free Video Downloader for TikTok, Instagram & More | SaveNexa',
+    description: 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.',
+    url: SITE_URL,
+    siteName: 'SaveNexa',
+    images: [
+      {
+        url: `${SITE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: 'SaveNexa — Free Video Downloader',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Video Downloader for TikTok, Instagram & More | SaveNexa',
+    description: 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.',
+    images: [`${SITE_URL}/og-image.png`],
+  },
+};
 
 const homeFaqs = [
   {
