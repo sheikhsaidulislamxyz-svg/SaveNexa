@@ -15,7 +15,6 @@ import DownloaderForm from '@/components/DownloaderForm';
 import PlatformCard from '@/components/PlatformCard';
 import FaqAccordion from '@/components/FaqAccordion';
 import AdSlot from '@/components/AdSlot';
-import SmartLink from '@/components/ads/SmartLink';
 import SchemaOrg from '@/components/SchemaOrg';
 import { SUPPORTED_PLATFORMS, SITE_NAME } from '@/lib/constants';
 
@@ -168,7 +167,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <SmartLink />
+      {/* Responsive Mid-Content Ad Banner */}
+      <AdSlot slot="content-mid" />
 
       {/* Section D: Why SaveNexa */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">

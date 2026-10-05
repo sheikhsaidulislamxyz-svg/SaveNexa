@@ -1,33 +1,37 @@
 'use client';
 
-import React from 'react';
+import { useEffect } from 'react';
 import { ADS_ENABLED } from '@/lib/constants';
 
 export default function SocialBar() {
-  if (!ADS_ENABLED) return null;
+  useEffect(() => {
+    if (!ADS_ENABLED) return;
 
-  const htmlContent = `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <style>
-    body { margin: 0; padding: 0; overflow: hidden; background: transparent; }
-  </style>
-</head>
-<body>
-  <script type="text/javascript">
-    window.onerror = function() { return true; };
-  </script>
-  <script type="text/javascript" src="https://bellnewyork.org/14/82392d996fbb040f16c1ca3fcfda6e95" data-cfasync="false" async onerror="console.debug('Social bar error handled');"></script>
-</body>
-</html>`;
+    const scriptId = 'adsterra-social-bar';
+    if (document.getElementById(scriptId)) return;
 
-  return (
-    <iframe
-      title="social-bar"
-      srcDoc={htmlContent}
-      style={{ display: 'none' }}
-      aria-hidden="true"
-    />
-  );
+    try {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.src = 'https://bellnewyork.org/14/82392d996fbb040f16c1ca3fcfda6e95';
+      script.setAttribute('data-cfasync', 'false');
+      script.async = true;
+      script.onerror = () => {
+        // Swallowed silently so third-party failure does not affect the downloader
+      };
+
+      document.body.appendChild(script);
+    } catch {
+      // Ignore if DOM not ready
+    }
+
+    return () => {
+      const el = document.getElementById(scriptId);
+      if (el && document.body.contains(el)) {
+        document.body.removeChild(el);
+      }
+    };
+  }, []);
+
+  return null;
 }

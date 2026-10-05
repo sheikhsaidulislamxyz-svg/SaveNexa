@@ -6,7 +6,7 @@ import BannerAd from './ads/BannerAd';
 import NativeBanner from './ads/NativeBanner';
 
 interface AdSlotProps {
-  slot: 'hero-below-tool' | 'result-below-options' | 'article-mid' | 'footer-above';
+  slot: 'hero-below-tool' | 'result-below-options' | 'content-mid' | 'article-mid' | 'footer-above';
   className?: string;
 }
 
@@ -32,6 +32,13 @@ export default function AdSlot({ slot, className = '' }: AdSlotProps) {
     case 'result-below-options':
       return (
         <div className={`w-full flex justify-center ${className}`}>
+          <BannerAd size="300x250" />
+        </div>
+      );
+
+    case 'content-mid':
+      return (
+        <div className={`w-full flex justify-center my-6 ${className}`}>
           <BannerAd size="300x250" />
         </div>
       );

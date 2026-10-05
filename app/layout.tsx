@@ -101,10 +101,10 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
         <SchemaOrg />
-        <SocialBar />
         <Header />
         <main className="flex-1 w-full">{children}</main>
         <Footer />
+        <SocialBar />
       </body>
     </html>
   );
