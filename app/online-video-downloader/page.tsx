@@ -9,15 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Online Video Downloader – Download Public Video Links',
-  description: 'Inspect and save direct online video files (.mp4, .webm, .mov, .m4v, .mp3) from any public server directly in your browser without software.',
+  title: 'Online Video Downloader – Download Video from URL in MP4 Online',
+  description: 'Download video from URL online in MP4, WebM, or MOV format. Free direct video URL downloader to inspect public media links and save files without software.',
   alternates: {
     canonical: '/online-video-downloader',
   },
   openGraph: {
-    title: 'Online Video Downloader – Download Public Video Links | SaveNexa',
-    description: 'Inspect and download direct video files (.mp4, .webm, .mov) directly from your browser.',
+    title: 'Online Video Downloader – Download Video from URL in MP4 Online | SaveNexa',
+    description: 'Download video from URL online in MP4, WebM, or MOV format. Free direct video URL downloader to inspect public media links and save files without software.',
     url: `${SITE_URL}/online-video-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -43,7 +44,7 @@ export default function OnlineVideoDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="Online Video Downloader – Download Public Video Links | SaveNexa"
+        title="Online Video Downloader – Download Video from URL in MP4 Online | SaveNexa"
         description="Inspect and save direct online video files (.mp4, .webm, .mov, .m4v) directly in your browser."
         url={`${SITE_URL}/online-video-downloader`}
       />
@@ -56,11 +57,11 @@ export default function OnlineVideoDownloaderPage() {
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          Direct Video & Audio Downloader
+          Online Video Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Inspect, analyze, and save direct public media links (MP4, WebM, MOV, MP3) from web servers and CDNs.
+          SaveNexa is a universal online video downloader that enables you to download video from URL links directly in your browser. Inspect, verify, and download MP4 from URL streams, WebM videos, Apple MOV files, and direct audio files from remote servers and CDNs with no app installation or registration needed.
         </p>
 
         <div className="pt-2">
@@ -68,6 +69,44 @@ export default function OnlineVideoDownloaderPage() {
             placeholderText="Paste direct media URL (e.g. https://.../video.mp4)"
             defaultSampleUrl="https://www.w3schools.com/html/mov_bbb.mp4"
           />
+        </div>
+      </section>
+
+      {/* Core Features Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What Our Direct Online Video Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Download MP4 from URL</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Fetches and verifies direct MP4 video files, preserving original frame rates and audio encoding.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>WebM, MOV & Audio Files</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Supports open-source WebM containers, Apple QuickTime MOV files, and direct MP3/WAV audio streams.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Server-Side Inspection</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Safe pre-flight HEAD inspection verifies byte length and content headers without caching data.
+            </p>
+          </div>
         </div>
       </section>
 

@@ -21,6 +21,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/how-to-download-x-twitter-videos',
     '/how-to-download-pinterest-videos',
     '/guides',
+    '/guides/download-videos-without-app',
+    '/guides/why-video-downloads-fail',
     '/guides/phone-video-download-guide',
     '/guides/browser-download-guide',
     '/guides/public-content-and-copyright',
@@ -32,7 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return routes.map((route) => ({
-    url: `${SITE_URL}${route}`,
+    url: route === '' ? `${SITE_URL}/` : `${SITE_URL}${route}`,
     lastModified: currentDate,
     changeFrequency: route === '' ? 'daily' : route.includes('downloader') ? 'weekly' : 'monthly',
     priority: route === '' ? 1.0 : route.includes('downloader') ? 0.9 : route.startsWith('/guides') ? 0.8 : 0.5,

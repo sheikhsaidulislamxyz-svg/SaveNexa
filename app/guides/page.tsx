@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Guides & Tutorials — Public Media Download Knowledge Base | SaveNexa',
     description: 'Learn how to save public media on any mobile or desktop device with SaveNexa guides.',
     url: `${SITE_URL}/guides`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -71,6 +72,22 @@ const platformGuides = [
 ];
 
 const generalGuides = [
+  {
+    slug: '/guides/download-videos-without-app',
+    title: 'How to Download Videos Without an App',
+    category: 'Device & Safety',
+    description: 'Save social media videos directly in Safari and Chrome without installing third-party apps or APKs.',
+    readTime: '5 min read',
+    icon: <Smartphone className="w-5 h-5 text-emerald-600" />,
+  },
+  {
+    slug: '/guides/why-video-downloads-fail',
+    title: 'Why Online Video Downloads Fail & How to Fix Them',
+    category: 'Troubleshooting',
+    description: 'Diagnose and fix common download errors: private accounts, expired CDN tokens, split DASH audio, and region gates.',
+    readTime: '5 min read',
+    icon: <Globe className="w-5 h-5 text-emerald-600" />,
+  },
   {
     slug: '/guides/phone-video-download-guide',
     title: 'Mobile Video Download Guide (iPhone & Android)',

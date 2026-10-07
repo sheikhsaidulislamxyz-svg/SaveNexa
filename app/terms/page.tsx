@@ -7,7 +7,7 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — SaveNexa',
+  title: 'Terms of Service & Usage Guidelines',
   description: 'Terms of Service and conditions for using SaveNexa public media download utility.',
   alternates: {
     canonical: '/terms',
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Terms of Service | SaveNexa',
     description: 'Terms of Service and responsible use guidelines for SaveNexa.',
     url: `${SITE_URL}/terms`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -25,7 +26,7 @@ export default function TermsPage() {
       <Breadcrumbs items={[{ name: 'Terms of Service', url: '/terms' }]} />
 
       <SchemaOrg
-        type="WebSite"
+        type="WebPage"
         title="Terms of Service | SaveNexa"
         description="Terms of service and user agreements for SaveNexa."
         url={`${SITE_URL}/terms`}

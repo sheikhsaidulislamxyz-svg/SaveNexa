@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     title: 'How to Download X (Twitter) Videos Step-by-Step Guide | SaveNexa',
     description: 'Complete walkthrough for saving public X / Twitter videos and GIFs directly to your mobile camera roll or computer files.',
     url: `${SITE_URL}/how-to-download-x-twitter-videos`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 

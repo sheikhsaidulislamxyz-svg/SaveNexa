@@ -23,7 +23,11 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
       '@type': 'ListItem',
       position: idx + 1,
       name: item.name,
-      item: item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url}`,
+      item: item.url.startsWith('http')
+        ? item.url
+        : item.url === '/'
+        ? `${SITE_URL}/`
+        : `${SITE_URL}${item.url.startsWith('/') ? item.url : `/${item.url}`}`,
     })),
   };
 

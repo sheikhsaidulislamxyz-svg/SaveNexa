@@ -7,7 +7,7 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Contact & Support — SaveNexa',
+  title: 'Contact & Support Team',
   description: 'Get in touch with the SaveNexa team for general feedback, provider bug reports, and copyright inquiries.',
   alternates: {
     canonical: '/contact',
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Contact & Support | SaveNexa',
     description: 'Contact SaveNexa for technical support and copyright notices.',
     url: `${SITE_URL}/contact`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -25,7 +26,7 @@ export default function ContactPage() {
       <Breadcrumbs items={[{ name: 'Contact', url: '/contact' }]} />
 
       <SchemaOrg
-        type="WebSite"
+        type="ContactPage"
         title="Contact SaveNexa"
         description="Contact information and support for SaveNexa."
         url={`${SITE_URL}/contact`}

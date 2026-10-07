@@ -81,6 +81,11 @@ export default function Footer() {
                   How to Save Pinterest Videos
                 </Link>
               </li>
+              <li className="pt-1">
+                <Link href="/guides" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors flex items-center gap-1">
+                  <span>Explore All Guides &rarr;</span>
+                </Link>
+              </li>
             </ul>
           </div>
 

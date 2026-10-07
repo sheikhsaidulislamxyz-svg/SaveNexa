@@ -9,15 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Reddit Video Downloader – Download Public Videos',
-  description: 'Download public Reddit videos (v.redd.it) and GIFs with synchronized audio streams directly in your browser without software or accounts.',
+  title: 'Reddit Video Downloader – Download Reddit Video with Sound in HD MP4',
+  description: 'Download Reddit video with sound in HD MP4 online. Free v.redd.it video downloader to save public Reddit videos with audio on iPhone, Android, and PC without apps.',
   alternates: {
     canonical: '/reddit-video-downloader',
   },
   openGraph: {
-    title: 'Reddit Video Downloader – Download Public Videos | SaveNexa',
-    description: 'Download Reddit videos with sound directly to your phone or desktop in HD MP4 format.',
+    title: 'Reddit Video Downloader – Download Reddit Video with Sound in HD MP4 | SaveNexa',
+    description: 'Download Reddit video with sound in HD MP4 online. Free v.redd.it video downloader to save public Reddit videos with audio on iPhone, Android, and PC without apps.',
     url: `${SITE_URL}/reddit-video-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -47,7 +48,7 @@ export default function RedditDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="Reddit Video Downloader – Download Public Videos | SaveNexa"
+        title="Reddit Video Downloader – Download Reddit Video with Sound in HD MP4 | SaveNexa"
         description="Download public Reddit videos (v.redd.it) and GIFs with audio streams directly in your browser."
         url={`${SITE_URL}/reddit-video-downloader`}
       />
@@ -60,11 +61,11 @@ export default function RedditDownloaderPage() {
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          Reddit Video Downloader for Public Posts
+          Reddit Video Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Download public Reddit videos from <code>v.redd.it</code> with full original audio and high-resolution video streams.
+          SaveNexa is a free online Reddit video downloader that solves the common issue of muted downloads by letting you download Reddit video with sound in high-definition MP4. Extract public v.redd.it video streams and synchronized audio tracks directly in your web browser without installing software or logging in.
         </p>
 
         <div className="pt-2">
@@ -72,6 +73,44 @@ export default function RedditDownloaderPage() {
             placeholderText="Paste Reddit URL (e.g. https://www.reddit.com/r/.../comments/... or https://v.redd.it/...)"
             defaultSampleUrl="https://www.reddit.com/r/NatureIsFuckingLit/comments/1example_reddit_post"
           />
+        </div>
+      </section>
+
+      {/* Core Features Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What Our Reddit Video Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Reddit Video with Sound</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Resolves split MPEG-DASH audio and video streams and provides complete media tracks for download.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>HD v.redd.it Downloader</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Provides direct access to 1080p Full HD, 720p HD, and 480p streams hosted on Reddit content delivery networks.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>redd.it & App Shortlinks</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Easily paste mobile app share links formatted as redd.it or direct v.redd.it links from any client.
+            </p>
+          </div>
         </div>
       </section>
 

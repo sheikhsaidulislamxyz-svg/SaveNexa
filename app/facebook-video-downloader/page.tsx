@@ -9,15 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Facebook Video Downloader – Save Public Videos & Reels',
-  description: 'Download public Facebook videos, watch clips, and FB reels in HD MP4 format directly in your browser without accounts or software.',
+  title: 'Facebook Video Downloader – Download FB Videos & Reels in HD MP4 Online',
+  description: 'Download Facebook videos, FB Reels, and Watch clips online in HD MP4. Free Facebook video downloader for iPhone, Android, and PC with no app installation required.',
   alternates: {
     canonical: '/facebook-video-downloader',
   },
   openGraph: {
-    title: 'Facebook Video Downloader – Save Public Videos & Reels | SaveNexa',
-    description: 'Download public Facebook videos, reels, and watch clips directly to your phone or desktop in HD MP4.',
+    title: 'Facebook Video Downloader – Download FB Videos & Reels in HD MP4 Online | SaveNexa',
+    description: 'Download Facebook videos, FB Reels, and Watch clips online in HD MP4. Free Facebook video downloader for iPhone, Android, and PC with no app installation required.',
     url: `${SITE_URL}/facebook-video-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -27,12 +28,16 @@ const fbFaqs = [
     answer: 'Tap the Share button on any public Facebook post, reel, or watch clip, tap "Copy link", paste it into SaveNexa in Safari or Chrome, and tap "Analyze & Save Media" to download the direct MP4 file.',
   },
   {
+    question: 'Can I download Facebook Reels with this tool?',
+    answer: 'Yes. SaveNexa unifies Facebook post videos, Watch episodes, and Facebook Reels. Simply paste the public facebook.com/reel/... URL to save vertical MP4 clips with full audio.',
+  },
+  {
     question: 'Can I download videos from private Facebook groups or accounts?',
     answer: 'No. SaveNexa strictly operates on public posts. Videos inside private groups, closed communities, or restricted to friends cannot be fetched.',
   },
   {
-    question: 'Does this support Facebook Reels and fb.watch links?',
-    answer: 'Yes. SaveNexa supports facebook.com/reel/..., fb.watch/... shortlinks, facebook.com/watch/..., and standard facebook.com/.../videos/... URLs.',
+    question: 'Does this support fb.watch shortlinks?',
+    answer: 'Yes. SaveNexa automatically resolves fb.watch/... mobile shortlinks, facebook.com/watch/... streams, and standard feed video links.',
   },
   {
     question: 'What video quality is available for Facebook downloads?',
@@ -47,8 +52,8 @@ export default function FacebookDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="Facebook Video Downloader – Save Public Videos & Reels | SaveNexa"
-        description="Download public Facebook videos, watch clips, and FB reels in MP4 format directly in your browser."
+        title="Facebook Video Downloader – Download FB Videos & Reels in HD MP4 Online | SaveNexa"
+        description="Download public Facebook videos, Watch clips, and FB Reels in MP4 format directly in your browser."
         url={`${SITE_URL}/facebook-video-downloader`}
       />
 
@@ -56,22 +61,60 @@ export default function FacebookDownloaderPage() {
       <section className="text-center space-y-4">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
           <Tv className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Facebook Public Media Utility</span>
+          <span>Free Online Facebook Downloader</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          Facebook Video Downloader for Public Links
+          Facebook Video Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Save public Facebook videos, Watch clips, and FB Reels directly in your browser with high-definition MP4 quality.
+          SaveNexa is a free online Facebook video downloader that allows you to download public Facebook videos, FB Reels, and Watch clips in HD MP4 format. Save Facebook video online directly through your browser with full synchronized audio without installing software or creating an account on iPhone, Android, or PC.
         </p>
 
         <div className="pt-2">
           <DownloaderForm
-            placeholderText="Paste Facebook Video URL (e.g. https://www.facebook.com/.../videos/...)"
+            placeholderText="Paste Facebook video link (e.g. https://www.facebook.com/watch/?v=... or /reel/...)"
             defaultSampleUrl="https://www.facebook.com/watch/?v=123456789012345"
           />
+        </div>
+      </section>
+
+      {/* Core Features Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What Our Facebook Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Facebook Watch & Post Videos</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Extracts high-definition 1080p and 720p MP4 streams from public desktop and mobile feed videos.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Facebook Reels Downloader</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Saves vertical short-form Facebook Reels with synchronized stereo audio and original sound tracks.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Mobile Shortlinks (fb.watch)</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Automatically handles and resolves shortened mobile share URLs without browser redirects failing.
+            </p>
+          </div>
         </div>
       </section>
 

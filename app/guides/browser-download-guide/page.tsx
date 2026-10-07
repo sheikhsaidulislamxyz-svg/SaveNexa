@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Browser Download Troubleshooting & Tips | SaveNexa',
     description: 'Fix common browser download issues across Chrome, Safari, Firefox, and Edge.',
     url: `${SITE_URL}/guides/browser-download-guide`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 

@@ -7,7 +7,7 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Copyright & DMCA Policy — SaveNexa',
+  title: 'Copyright & DMCA Notice Procedures',
   description: 'Copyright and DMCA Takedown Notice procedures for SaveNexa. Learn how to report intellectual property concerns.',
   alternates: {
     canonical: '/copyright',
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Copyright & DMCA Policy | SaveNexa',
     description: 'DMCA Takedown & Copyright Notice procedures for SaveNexa.',
     url: `${SITE_URL}/copyright`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -25,7 +26,7 @@ export default function CopyrightPage() {
       <Breadcrumbs items={[{ name: 'Copyright & DMCA', url: '/copyright' }]} />
 
       <SchemaOrg
-        type="WebSite"
+        type="WebPage"
         title="Copyright & DMCA Policy | SaveNexa"
         description="Copyright policy and DMCA takedown procedures for SaveNexa."
         url={`${SITE_URL}/copyright`}

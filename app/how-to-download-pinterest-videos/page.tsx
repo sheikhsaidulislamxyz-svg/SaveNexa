@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     title: 'How to Download Pinterest Videos Step-by-Step Guide | SaveNexa',
     description: 'Learn how to download and save public Pinterest video pins and idea clips directly to your phone or desktop in HD MP4.',
     url: `${SITE_URL}/how-to-download-pinterest-videos`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 

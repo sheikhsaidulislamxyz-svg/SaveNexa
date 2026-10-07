@@ -9,34 +9,39 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'TikTok Video Downloader – Save TikTok Videos in HD',
-  description: 'Download public TikTok videos in HD MP4 format directly in your browser. Fast, free, and secure online downloader without software or accounts.',
+  title: 'TikTok Video Downloader Online – Download TikTok Videos in HD MP4',
+  description: 'Download TikTok videos online in HD MP4 without watermarks or app installations. Free, fast TikTok video downloader for iPhone, Android, and PC with audio extraction.',
   alternates: {
     canonical: '/tiktok-video-downloader',
   },
   openGraph: {
-    title: 'TikTok Video Downloader – Save TikTok Videos in HD | SaveNexa',
-    description: 'Save available media from public TikTok links in your browser without accounts or software.',
+    title: 'TikTok Video Downloader Online – Download TikTok Videos in HD MP4 | SaveNexa',
+    description: 'Download TikTok videos online in HD MP4 without watermarks or app installations. Free, fast TikTok video downloader for iPhone, Android, and PC with audio extraction.',
     url: `${SITE_URL}/tiktok-video-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
 const tiktokFaqs = [
   {
-    question: 'How do I download a public TikTok video on iPhone/iOS?',
-    answer: 'Copy the video link in the TikTok app by tapping Share > Copy Link. Open Safari, paste the link into SaveNexa, tap Analyze & Save Media, and tap Download. Safari saves the MP4 video to your Files app, where you can easily save it to Photos.',
+    question: 'How do I download a public TikTok video without watermarks?',
+    answer: 'SaveNexa accesses the public source stream provided by TikTok content delivery servers. Because it extracts the direct media file rather than screen-recording or re-encoding with branding stamps, available downloads provide clean MP4 video playback.',
   },
   {
-    question: 'Can I download private TikTok videos or drafts?',
-    answer: 'No. SaveNexa only resolves publicly accessible media. Private posts, friends-only videos, and deleted content cannot be analyzed.',
+    question: 'How do I save TikTok videos to my iPhone Photos library?',
+    answer: 'In the TikTok app, tap Share > Copy Link. Open Safari, navigate to SaveNexa, paste the link, and tap "Analyze & Save Media". Tap Download to save the MP4 to the Safari Download Manager (Files app). In Files, tap Share and choose "Save Video" to move it directly into your Photos camera roll.',
   },
   {
-    question: 'Does this tool download original HD quality MP4 files?',
-    answer: 'Yes. SaveNexa resolves the original source streams provided by the TikTok CDN, delivering the highest available resolution for offline playback.',
+    question: 'Can I download private TikTok clips or videos from private accounts?',
+    answer: 'No. SaveNexa strictly analyzes publicly accessible links. Private accounts, friends-only videos, and draft videos protected by user authentication cannot be accessed.',
   },
   {
-    question: 'Can I extract audio or MP3 from TikTok videos?',
-    answer: 'Yes. When original audio tracks are available as separate audio streams, SaveNexa provides an audio download option alongside the video formats.',
+    question: 'Can I extract the audio or sound track from a TikTok video?',
+    answer: 'Yes. When the publisher provides an isolated original audio stream, SaveNexa resolves a dedicated direct audio option alongside the MP4 video format choices.',
+  },
+  {
+    question: 'What video quality is available for TikTok downloads?',
+    answer: 'SaveNexa delivers the highest quality stream provided by the TikTok CDN for the post, including 1080p Full HD and 720p HD MP4 video with synchronized audio.',
   },
 ];
 
@@ -49,8 +54,8 @@ export default function TikTokDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="TikTok Video Downloader – Save TikTok Videos in HD | SaveNexa"
-        description="Download public TikTok videos in HD MP4 format directly in your browser without software or accounts."
+        title="TikTok Video Downloader Online – Download TikTok Videos in HD MP4 | SaveNexa"
+        description="Download public TikTok videos in HD MP4 format directly in your browser without watermarks or app installs."
         url={`${SITE_URL}/tiktok-video-downloader`}
       />
 
@@ -58,22 +63,60 @@ export default function TikTokDownloaderPage() {
       <section className="text-center space-y-4">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
           <Video className="w-3.5 h-3.5 text-emerald-600" />
-          <span>TikTok Public Media Utility</span>
+          <span>Free Online TikTok Downloader</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          TikTok Video Downloader for Public Links
+          TikTok Video Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Paste any public TikTok video link to analyze available source streams and save clean MP4 video files directly in your browser.
+          SaveNexa is a free online TikTok video downloader that allows you to download public TikTok videos in HD MP4 directly in your browser. Save clean clips without watermarks, extract original audio (MP3/M4A) when provided, and download TikTok videos without installing any app on iPhone, Android, or PC.
         </p>
 
         <div className="pt-2">
           <DownloaderForm
-            placeholderText="Paste TikTok URL (e.g. https://www.tiktok.com/@user/video/... or https://vm.tiktok.com/...)"
+            placeholderText="Paste TikTok video link (e.g. https://www.tiktok.com/@.../video/... or https://vm.tiktok.com/...)"
             defaultSampleUrl="https://www.tiktok.com/@tiktok/video/7106594312292453675"
           />
+        </div>
+      </section>
+
+      {/* Core Features & Intent Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What SaveNexa TikTok Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>TikTok HD MP4 (No Watermark)</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Extracts original high-definition streams delivered by TikTok CDN servers without re-encoding or adding stamped logos.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>TikTok Audio / Sound Track</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              When an isolated creator sound or background music stream is available, SaveNexa resolves a dedicated direct audio download option.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>100% Browser-Based (No App)</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Works directly in Safari, Chrome, and Firefox on iOS, Android, macOS, and Windows with zero software installation or signup.
+            </p>
+          </div>
         </div>
       </section>
 

@@ -7,7 +7,7 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — SaveNexa',
+  title: 'Privacy Policy & Zero-Tracking Architecture',
   description: 'SaveNexa Privacy Policy. We do not require accounts, do not store download history, and do not archive user media on our servers.',
   alternates: {
     canonical: '/privacy',
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Privacy Policy | SaveNexa',
     description: 'Privacy Policy for SaveNexa public media downloader.',
     url: `${SITE_URL}/privacy`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -25,7 +26,7 @@ export default function PrivacyPage() {
       <Breadcrumbs items={[{ name: 'Privacy Policy', url: '/privacy' }]} />
 
       <SchemaOrg
-        type="WebSite"
+        type="WebPage"
         title="Privacy Policy | SaveNexa"
         description="Privacy policy and zero-tracking commitment of SaveNexa."
         url={`${SITE_URL}/privacy`}

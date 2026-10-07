@@ -7,7 +7,7 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Public Content, Copyright, and Fair Use Guide — SaveNexa',
+  title: 'Public Content, Copyright, and Fair Use Guide',
   description: 'Understand the legal principles of downloading public online media, copyright ownership, fair use exceptions, and creator rights.',
   alternates: {
     canonical: '/guides/public-content-and-copyright',
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Public Content, Copyright, and Fair Use Guide | SaveNexa',
     description: 'Guidelines on responsible media saving, fair use, and copyright compliance.',
     url: `${SITE_URL}/guides/public-content-and-copyright`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 

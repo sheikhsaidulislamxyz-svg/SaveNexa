@@ -1,89 +1,118 @@
 # SaveNexa — Social Video & Media Downloader
 
-> **Fast, clean, mobile-first public media downloader & stream analyzer.**
+> **Fast, clean, privacy-first web utility for analyzing and downloading public media streams.**
 
-SaveNexa is a production-grade, zero-cost, open-source web utility that allows users to paste a supported **public media link** (TikTok, Instagram, Facebook, X, Reddit, Pinterest, or direct media URL) and receive an available media stream for browser-native downloading.
-
----
-
-## Key Features
-
-- **Mobile-First & Touch-Ergonomic**: Designed for one-handed thumb interaction with instant clipboard paste and native mobile download manager integration.
-- **Zero-Account & Privacy-First**: No login, no accounts, no cookies, no tracking pixels, and no database.
-- **Direct CDN Streaming**: Zero server media storage. Media streams are resolved in real-time and served directly from origin CDNs.
-- **Modular Provider Adapters**: Independent adapters for TikTok, Instagram, Facebook, X, Reddit, Pinterest, and Generic direct video URLs.
-- **Strict SSRF Hardening**: Comprehensive defense against loopback, private IPv4/IPv6 ranges, link-local addresses, and non-standard ports.
-- **Zero `.env` Requirement**: All application constants reside in transparent source configuration with no secret keys required for MVP.
-- **Technical SEO Master Architecture**: 100% server-rendered SEO landing pages, unique canonical tags, robots.txt, dynamic sitemap, and Schema.org JSON-LD structured data.
+SaveNexa is an open-source, mobile-first web application designed to analyze public media links (from TikTok, Instagram, Facebook, X/Twitter, Reddit, Pinterest, and direct video URLs) and deliver available public streams directly to the browser for native saving.
 
 ---
 
-## Supported Platforms
+## 🌐 Live Website
 
-| Platform | Primary URL Types | Output Format |
-|---|---|---|
-| **TikTok** | Public video links (`tiktok.com/@.../video/...`, `vm.tiktok.com/...`) | HD MP4 Stream |
-| **Instagram** | Public posts, carousels, and videos (`instagram.com/p/...`) | High-res MP4 |
-| **Instagram Reels** | Public Reels (`instagram.com/reel/...`) | High-res MP4 with Audio |
-| **Facebook** | Public watch videos & reels (`facebook.com/watch/...`, `fb.watch/...`) | MP4 Video |
-| **X (Twitter)** | Public tweets, video threads, and GIFs (`x.com/.../status/...`) | MP4 Video |
-| **Reddit** | Public Reddit videos & v.redd.it links | HD Video + DASH Audio |
-| **Pinterest** | Public video pins and idea pins (`pinterest.com/pin/...`) | High-res MP4 |
-| **Direct Media** | `.mp4`, `.webm`, `.mov`, `.m4v`, `.mp3`, `.m4a` | Direct Source Stream |
+Access the official production web application at:
+
+**[https://save-nexa.vercel.app/](https://save-nexa.vercel.app/)**
+
+*Free to use, zero account creation required, and 100% browser-based.*
 
 ---
 
-## Getting Started
+## 🚀 Key Features
+
+- **Mobile-First Ergonomics**: Designed for single-hand touch interaction, instant clipboard pasting, and native mobile download managers (iOS Safari & Android Chrome).
+- **Direct Origin Streaming**: Zero server media storage. SaveNexa analyzes public stream locations and provides direct CDN streams for native browser downloads without intermediate file retention.
+- **Privacy by Default**: No user accounts, no login walls, no tracking databases, and no unnecessary tracking scripts.
+- **Multi-Platform Support**: Specialized analyzers for TikTok, Instagram posts & Reels, Facebook videos, X (formerly Twitter) clips & GIFs, Reddit DASH video/audio, Pinterest video pins, and direct media URLs (.mp4, .webm, .mov, etc.).
+- **Security & SSRF Hardening**: Strict host whitelisting, RFC 1918 private IP blocking, loopback prevention, and sanitization of user-supplied URLs.
+- **Structured Semantic SEO**: Full Next.js server-rendered metadata, Schema.org JSON-LD structured data (WebApplication, BreadcrumbList, Article, FAQPage), self-referential canonicals, dynamic sitemap, and Open Graph / Twitter Card support.
+
+---
+
+## 📱 Supported Platforms & URL Formats
+
+| Platform | Supported Formats | Primary URL Patterns | Output Type |
+|---|---|---|---|
+| **TikTok** | Public videos & audio clips | `tiktok.com/@.../video/...`, `vm.tiktok.com/...` | HD MP4 / M4A |
+| **Instagram** | Feed videos & carousels | `instagram.com/p/...` | HD MP4 |
+| **Instagram Reels** | Public Reels with synchronized audio | `instagram.com/reel/...` | HD MP4 (with audio) |
+| **Facebook** | Public watch videos & FB Reels | `facebook.com/watch/?v=...`, `fb.watch/...` | MP4 Video |
+| **X (Twitter)** | Public tweets with video & GIFs | `x.com/.../status/...`, `twitter.com/...` | MP4 Video / GIF-as-MP4 |
+| **Reddit** | Public Reddit videos & v.redd.it links | `reddit.com/r/.../comments/...`, `v.redd.it/...` | MP4 (Video + Audio) |
+| **Pinterest** | Public video pins & idea pins | `pinterest.com/pin/...`, `pin.it/...` | High-res MP4 |
+| **Direct Media** | Public media links | Direct `.mp4`, `.webm`, `.mov`, `.m4v`, `.mp3` | Original File Stream |
+
+*Note: SaveNexa strictly supports public, accessible media. Private posts, stories, copyrighted DRMs, and password-protected streams are intentionally unsupported.*
+
+---
+
+## 🛠 Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router, Server Components & TypeScript)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Animation**: [Motion](https://motion.dev/)
+- **Deployment Target**: Vercel / Node.js Serverless Container
+
+---
+
+## 💻 Getting Started (Local Development)
 
 ### Prerequisites
 
-- Node.js 18+ or Node.js 20+
-- npm / pnpm / yarn
+- Node.js 18.x or 20.x+
+- npm, pnpm, or bun
 
-### Installation & Local Run
+### Setup
 
 ```bash
-# Install dependencies
+# 1. Clone the repository
+git clone https://github.com/your-username/savenexa.git
+cd savenexa
+
+# 2. Install dependencies
 npm install
 
-# Run the local development server
+# 3. Start development server
 npm run dev
 
-# Open http://localhost:3000 in your browser
+# 4. Open http://localhost:3000 in your browser
 ```
 
-### Production Build
+### Production Build & Verification
 
 ```bash
-# Compile and build the production bundle
+# Run ESLint validation
+npm run lint
+
+# Build production bundle
 npm run build
 
-# Start the standalone production server
-npm start
+# Start production server
+npm run start
 ```
 
 ---
 
-## Architecture Overview
+## 📖 Documentation & Specifications
 
-```text
-Browser (Mobile/Desktop) 
-       │
-       ▼
-Next.js App Router (Static SEO Pages + Islands)
-       │
-       ▼ POST /api/analyze
-In-Memory Rate Limiter + SSRF Security Guard
-       │
-       ▼
-Provider Adapter Registry (TikTok, IG, FB, X, Reddit, Pinterest, Generic)
-       │
-       ▼ Direct Origin Response
-Browser-Native Download (<a href="..." download>)
-```
+- [`/docs/SEO-PLAYBOOK.md`](docs/SEO-PLAYBOOK.md) — Technical SEO strategy, keyword clustering, search intent mapping, and canonical rules.
+- [`/docs/SEO-CONTENT-MAP.md`](docs/SEO-CONTENT-MAP.md) — Complete content inventory, URL structure, and cannibalization prevention rules.
+- [`/docs/LAUNCH-COPY.md`](docs/LAUNCH-COPY.md) — Factual launch and distribution copy for Product Hunt, developer communities, and social platforms.
+- [`/docs/OUTREACH-PLAN.md`](docs/OUTREACH-PLAN.md) — Ethical outreach targets across open-source directories, tech blogs, and developer hubs.
+- [`/docs/PRD.md`](docs/PRD.md) — Product Requirements Document.
+- [`/docs/TRD.md`](docs/TRD.md) — Technical Requirements & Architecture Document.
+- [`/docs/PROVIDERS.md`](docs/PROVIDERS.md) — Media extractor and provider adapter specifications.
 
 ---
 
-## License
+## 🏷 GitHub Topics & Categorization
 
-SaveNexa is open-source software licensed under the [Apache License 2.0](LICENSE).
+Suggested repository topics for open-source discovery:
+`video-downloader`, `nextjs`, `typescript`, `tailwind-css`, `tiktok-downloader`, `instagram-downloader`, `reddit-video-downloader`, `twitter-downloader`, `media-analyzer`, `open-source-tool`
+
+---
+
+## ⚖️ License & Fair Use
+
+SaveNexa is open-source software licensed under the [Apache License 2.0](LICENSE). 
+
+SaveNexa is an educational and personal stream utility designed solely for public, non-copyrighted or user-owned content. Please review our [Terms of Service](https://save-nexa.vercel.app/terms), [Privacy Policy](https://save-nexa.vercel.app/privacy), and [Copyright / DMCA Guidelines](https://save-nexa.vercel.app/copyright).

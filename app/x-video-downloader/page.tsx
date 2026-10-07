@@ -9,15 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'X (Twitter) Video Downloader – Download HD MP4',
-  description: 'Download public videos, GIFs, and media attachments from X (formerly Twitter) in HD MP4 format directly in your browser. Fast, free, and secure.',
+  title: 'X (Twitter) Video Downloader – Download Twitter Video & GIF to MP4 Online',
+  description: 'Download Twitter video clips and animated GIFs from X tweets online in 1080p/720p HD MP4. Free X video downloader to save video from a tweet on iPhone, Android, and PC.',
   alternates: {
     canonical: '/x-video-downloader',
   },
   openGraph: {
-    title: 'X (Twitter) Video Downloader – Download HD MP4 | SaveNexa',
-    description: 'Download public videos, GIFs, and media from X / Twitter directly to your phone or desktop in high definition.',
+    title: 'X (Twitter) Video Downloader – Download Twitter Video & GIF to MP4 Online | SaveNexa',
+    description: 'Download Twitter video clips and animated GIFs from X tweets online in 1080p/720p HD MP4. Free X video downloader to save video from a tweet on iPhone, Android, and PC.',
     url: `${SITE_URL}/x-video-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -47,7 +48,7 @@ export default function XDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="X (Twitter) Video Downloader – Download HD MP4 | SaveNexa"
+        title="X (Twitter) Video Downloader – Download Twitter Video & GIF to MP4 Online | SaveNexa"
         description="Download public videos, GIFs, and media attachments from X (formerly Twitter) directly in your browser in MP4 format."
         url={`${SITE_URL}/x-video-downloader`}
       />
@@ -60,11 +61,11 @@ export default function XDownloaderPage() {
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          X (Twitter) Video Downloader for Public Posts
+          X (Twitter) Video Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Save public video clips, GIFs, and media attachments from X (formerly Twitter) straight to your device in original high definition.
+          SaveNexa is an online X (Twitter) video downloader that lets you download Twitter video clips and animated GIFs from public tweets in 1080p and 720p HD MP4. Convert Twitter to MP4 directly in your web browser to download video from a tweet without installing apps or browser extensions on iPhone, Android, Mac, or Windows.
         </p>
 
         <div className="pt-2">
@@ -72,6 +73,44 @@ export default function XDownloaderPage() {
             placeholderText="Paste X / Twitter URL (e.g. https://x.com/.../status/... or https://twitter.com/...)"
             defaultSampleUrl="https://x.com/NASA/status/2105677597078126844"
           />
+        </div>
+      </section>
+
+      {/* Core Features Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What Our X (Twitter) Video Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Twitter Video to MP4</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Provides selectable multi-bitrate streams up to 1080p Full HD and 720p HD with synchronized audio.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Twitter GIF Downloader</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Extracts high-frame-rate MP4 video files from embedded animated GIFs for smooth offline looping playback.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Both x.com & twitter.com</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Fully compatible with new x.com URLs as well as legacy twitter.com status links without manual rewriting.
+            </p>
+          </div>
         </div>
       </section>
 

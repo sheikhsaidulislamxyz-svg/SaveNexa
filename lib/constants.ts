@@ -1,24 +1,52 @@
 export const SITE_NAME = 'SaveNexa';
 export const SITE_TAGLINE = 'Free Video Downloader';
 export const SITE_DESCRIPTION = 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.';
+
+export const CANONICAL_SITE_URL = 'https://save-nexa.vercel.app';
+
 export function getSiteUrl(): string {
-  // 1. Check Vercel automatic system variable
+  // 1. Explicit production site override
+  const explicitSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL;
+  if (explicitSiteUrl && explicitSiteUrl.startsWith('http')) {
+    return explicitSiteUrl.replace(/\/+$/, '');
+  }
+
+  // 2. Vercel production system variable
   const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL;
-  if (vercelUrl && vercelUrl !== 'MY_APP_URL') {
-    return vercelUrl.startsWith('http') ? vercelUrl : `https://${vercelUrl}`;
+  if (
+    vercelUrl &&
+    vercelUrl !== 'MY_APP_URL' &&
+    !vercelUrl.includes('localhost') &&
+    !vercelUrl.includes('run.app')
+  ) {
+    const full = vercelUrl.startsWith('http') ? vercelUrl : `https://${vercelUrl}`;
+    return full.replace(/\/+$/, '');
   }
 
-  // 2. Check custom APP_URL
+  // 3. Custom APP_URL if pointing to production custom domain (exclude internal staging/run.app)
   const appUrl = process.env.APP_URL;
-  if (appUrl && appUrl !== 'MY_APP_URL' && appUrl.startsWith('http')) {
-    return appUrl;
+  if (
+    appUrl &&
+    appUrl !== 'MY_APP_URL' &&
+    appUrl.startsWith('http') &&
+    !appUrl.includes('run.app') &&
+    !appUrl.includes('localhost')
+  ) {
+    return appUrl.replace(/\/+$/, '');
   }
 
-  // 3. Fallback to localhost for local dev
-  return 'http://localhost:3000';
+  // 4. Default to canonical live production site for sitemaps, robots, metadata, and schema
+  return CANONICAL_SITE_URL;
 }
 
 export const SITE_URL = getSiteUrl();
+
+export const DEFAULT_OG_IMAGE = {
+  url: `${SITE_URL}/og-image.png`,
+  width: 1200,
+  height: 630,
+  alt: `${SITE_NAME} — ${SITE_TAGLINE}`,
+};
 
 export const MAX_URL_LENGTH = 4096;
 export const MAX_ANALYZE_ATTEMPTS_PER_WINDOW = 60;

@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'Mobile Video Download Guide (iPhone & Android) | SaveNexa',
     description: 'Learn how to save videos directly on iPhone and Android mobile browsers.',
     url: `${SITE_URL}/guides/phone-video-download-guide`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 

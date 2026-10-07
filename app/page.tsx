@@ -20,14 +20,14 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SUPPORTED_PLATFORMS, SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Free Video Downloader for TikTok, Instagram & More',
-  description: 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.',
+  title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
+  description: 'Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4. Free browser downloader with no apps or sign-up needed.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Free Video Downloader for TikTok, Instagram & More | SaveNexa',
-    description: 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.',
+    title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
+    description: 'Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4. Free browser downloader with no apps or sign-up needed.',
     url: SITE_URL,
     siteName: 'SaveNexa',
     images: [
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Video Downloader for TikTok, Instagram & More | SaveNexa',
-    description: 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.',
+    title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
+    description: 'Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4. Free browser downloader with no apps or sign-up needed.',
     images: [`${SITE_URL}/og-image.png`],
   },
 };
@@ -85,8 +85,8 @@ export default function HomePage() {
     <div className="space-y-16 sm:space-y-24 pb-16">
       <SchemaOrg
         type="WebApplication"
-        title="Download Public Videos & Media Online | SaveNexa"
-        description="Paste a supported public link. Save available video, audio, image, or file formats directly from your browser without accounts or software."
+        title="Free Online Video Downloader – TikTok, Instagram, X & More | SaveNexa"
+        description="Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4 directly in your browser."
       />
 
       {/* Hero Section */}
@@ -98,11 +98,11 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15] text-balance">
-            Download Public Videos & Media Online
+            Free Online Video Downloader for Public Social Media
           </h1>
 
           <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-            Paste a supported public media link. Save available video, audio, image, or file formats directly from your browser.
+            Paste a public link from TikTok, Instagram, Facebook, X, Reddit, or Pinterest to download high-definition MP4 videos, reels, and audio directly in your browser without installing apps or registering.
           </p>
 
           {/* Interactive Downloader Island */}

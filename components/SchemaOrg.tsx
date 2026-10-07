@@ -74,6 +74,7 @@ export default function SchemaOrg({
       '@id': `${url}/#article`,
       headline: title,
       description,
+      image: `${SITE_URL}/og-image.png`,
       url,
       datePublished: datePublished || '2026-01-01T00:00:00Z',
       dateModified: dateModified || new Date().toISOString(),

@@ -9,15 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Pinterest Video Downloader – Save Video Pins in HD',
-  description: 'Download public Pinterest video pins, idea clips, and tutorials in HD MP4 format directly in your browser without software, extensions, or registration.',
+  title: 'Pinterest Video Downloader – Download Video Pins & Idea Pins in HD MP4',
+  description: 'Download Pinterest video pins and idea clips online in HD MP4 format. Free Pinterest video downloader to save public video pins without apps on mobile and PC.',
   alternates: {
     canonical: '/pinterest-video-downloader',
   },
   openGraph: {
-    title: 'Pinterest Video Downloader – Save Video Pins in HD | SaveNexa',
-    description: 'Download public Pinterest videos and idea pins directly to your phone or desktop in HD MP4 format.',
+    title: 'Pinterest Video Downloader – Download Video Pins & Idea Pins in HD MP4 | SaveNexa',
+    description: 'Download Pinterest video pins and idea clips online in HD MP4 format. Free Pinterest video downloader to save public video pins without apps on mobile and PC.',
     url: `${SITE_URL}/pinterest-video-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -47,7 +48,7 @@ export default function PinterestDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="Pinterest Video Downloader – Save Video Pins in HD | SaveNexa"
+        title="Pinterest Video Downloader – Download Video Pins & Idea Pins in HD MP4 | SaveNexa"
         description="Download public Pinterest video pins, idea pins, and high-resolution clips directly in your browser without software."
         url={`${SITE_URL}/pinterest-video-downloader`}
       />
@@ -60,11 +61,11 @@ export default function PinterestDownloaderPage() {
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          Pinterest Video Downloader for Public Pins
+          Pinterest Video Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Save public Pinterest video pins, animated idea clips, and tutorials directly to your device in crisp MP4 format.
+          SaveNexa is a free online Pinterest video downloader that allows you to download public Pinterest video pins, animated idea clips, and tutorial videos in HD MP4 format. Save Pinterest video online directly through your browser without installing apps, browser extensions, or signing up on iPhone, Android, or desktop.
         </p>
 
         <div className="pt-2">
@@ -72,6 +73,44 @@ export default function PinterestDownloaderPage() {
             placeholderText="Paste Pinterest Pin URL (e.g. https://www.pinterest.com/pin/... or https://pin.it/...)"
             defaultSampleUrl="https://www.pinterest.com/pin/579908889542843424/"
           />
+        </div>
+      </section>
+
+      {/* Core Features Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What Our Pinterest Video Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Video Pins in HD MP4</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Extracts high-resolution MP4 video streams encoded in H.264 with synchronized AAC audio tracks.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Idea Pin Video Downloads</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Captures animated recipe clips, DIY walkthroughs, and multi-page video pins with crystal clarity.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>pin.it Mobile Shortlinks</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Seamlessly resolves shortened mobile app links (pin.it) and standard desktop pinterest.com URLs.
+            </p>
+          </div>
         </div>
       </section>
 

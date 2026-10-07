@@ -9,26 +9,27 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Instagram Reels Downloader – Save Reels in HD',
-  description: 'Download public Instagram Reels with full original audio in high-definition MP4 format directly in your browser without software or account login.',
+  title: 'Instagram Reels Downloader – Download Instagram Reels with Audio in HD',
+  description: 'Download Instagram Reels with audio online in HD MP4. Free Instagram Reel downloader to save public Reels without apps on iPhone, Android, and desktop.',
   alternates: {
     canonical: '/instagram-reels-downloader',
   },
   openGraph: {
-    title: 'Instagram Reels Downloader – Save Reels in HD | SaveNexa',
-    description: 'Save public Instagram Reels with original audio directly to your phone or desktop.',
+    title: 'Instagram Reels Downloader – Download Instagram Reels with Audio in HD | SaveNexa',
+    description: 'Download Instagram Reels with audio online in HD MP4. Free Instagram Reel downloader to save public Reels without apps on iPhone, Android, and desktop.',
     url: `${SITE_URL}/instagram-reels-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
 const reelsFaqs = [
   {
     question: 'How do I save an Instagram Reel in HD with sound to my iPhone?',
-    answer: 'Copy the Reel link from the Instagram app (tap Share > Copy link), open Safari, paste the link into SaveNexa, and tap Download. Safari downloads the MP4 file to your Files app, where you can tap the Share button and select "Save Video" to export it to your Photos library.',
+    answer: 'Copy the Reel link from the Instagram app (tap Share > Copy link), open Safari, paste the link into SaveNexa, and tap "Analyze & Save Media". Tap Download to save the MP4 file to Safari Downloads (Files app). In Files, open the video, tap the Share button, and select "Save Video" to export it into your Photos library.',
   },
   {
     question: 'Does this save the original audio and background music?',
-    answer: 'Yes. SaveNexa extracts the full multiplexed MP4 stream with synchronized stereo audio directly from the source CDN.',
+    answer: 'Yes. SaveNexa extracts the full multiplexed MP4 stream with synchronized stereo audio directly from the source CDN, preserving creator commentary and background music tracks.',
   },
   {
     question: 'Why did an Instagram Reel fail to download?',
@@ -36,7 +37,7 @@ const reelsFaqs = [
   },
   {
     question: 'Can I download Instagram Stories or Highlights here?',
-    answer: 'Stories and ephemeral Highlights require specific session authorization and are not supported. For permanent feed video posts, use our Instagram Video Downloader.',
+    answer: 'Stories and ephemeral Highlights require specific session authorization and are not supported. For permanent feed video posts, visit our Instagram Video Downloader.',
   },
 ];
 
@@ -52,8 +53,8 @@ export default function InstagramReelsDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="Instagram Reels Downloader – Save Reels in HD | SaveNexa"
-        description="Download public Instagram Reels in HD MP4 format with full audio directly in your browser."
+        title="Instagram Reels Downloader – Download Instagram Reels with Audio in HD | SaveNexa"
+        description="Download public Instagram Reels in HD MP4 format with full audio directly in your browser without software."
         url={`${SITE_URL}/instagram-reels-downloader`}
       />
 
@@ -61,22 +62,60 @@ export default function InstagramReelsDownloaderPage() {
       <section className="text-center space-y-4">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
           <Film className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Instagram Reels Media Utility</span>
+          <span>Free Online Instagram Reels Downloader</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          Instagram Reels Downloader for Public Clips
+          Instagram Reels Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Extract high-definition MP4 vertical video streams and original audio tracks from public Instagram Reels directly in your browser.
+          SaveNexa is a fast, free online Instagram Reels downloader that lets you download Instagram Reels in high-definition MP4 with original synchronized audio. Save public Instagram Reels directly to your phone camera roll or computer files without installing apps, entering passwords, or compromising video quality.
         </p>
 
         <div className="pt-2">
           <DownloaderForm
-            placeholderText="Paste Instagram Reel URL (e.g. https://www.instagram.com/reel/...)"
+            placeholderText="Paste Instagram Reel link (e.g. https://www.instagram.com/reel/...)"
             defaultSampleUrl="https://www.instagram.com/reel/DdcJGoJod0y/?stkn=MThud"
           />
+        </div>
+      </section>
+
+      {/* Core Features Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What SaveNexa Instagram Reel Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Reels with Audio</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Extracts complete multiplexed MP4 video with synchronized audio tracks, background music, and creator voiceovers.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Full HD Vertical Quality</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Preserves 1080x1920 portrait aspect ratios and native CDN frame rates without compression artifacts.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Save Without Apps</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Direct mobile browser downloads straight into iOS Files (Camera Roll) and Android Gallery.
+            </p>
+          </div>
         </div>
       </section>
 

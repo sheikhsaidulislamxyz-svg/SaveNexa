@@ -9,22 +9,23 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Instagram Video Downloader – Download Instagram Videos',
-  description: 'Download public Instagram feed videos, IGTV clips, and carousel media in high-definition MP4 format directly in your browser without accounts or software.',
+  title: 'Instagram Video Downloader – Download Instagram Video in HD MP4 Online',
+  description: 'Download public Instagram video posts, carousels, and IGTV clips online in HD MP4. Free browser downloader to save Instagram video without apps on iPhone, Android, and PC.',
   alternates: {
     canonical: '/instagram-video-downloader',
   },
   openGraph: {
-    title: 'Instagram Video Downloader – Download Instagram Videos | SaveNexa',
-    description: 'Save available media from public Instagram feed posts and videos in your browser without accounts or software.',
+    title: 'Instagram Video Downloader – Download Instagram Video in HD MP4 Online | SaveNexa',
+    description: 'Download public Instagram video posts, carousels, and IGTV clips online in HD MP4. Free browser downloader to save Instagram video without apps on iPhone, Android, and PC.',
     url: `${SITE_URL}/instagram-video-downloader`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
 const instagramFaqs = [
   {
-    question: 'How do I download a public Instagram feed video on my phone?',
-    answer: 'Open Instagram, tap the three dots or Share icon on any public post, tap "Copy link", paste the URL into SaveNexa in Safari or Chrome, and tap "Analyze & Save Media" to download the MP4 file.',
+    question: 'How do I download a public Instagram video on my phone?',
+    answer: 'Open the Instagram app, tap the three dots or Share icon on any public post, tap "Copy link", paste the URL into SaveNexa in Safari or Chrome, and tap "Analyze & Save Media" to download the direct MP4 file.',
   },
   {
     question: 'Can I download videos from private Instagram accounts?',
@@ -36,7 +37,7 @@ const instagramFaqs = [
   },
   {
     question: 'How is this different from the Instagram Reels Downloader?',
-    answer: 'This page is optimized for standard feed posts (square and landscape aspect ratios, multi-slide carousels, and legacy IGTV posts). For vertical short-form clips, visit our Instagram Reels Downloader.',
+    answer: 'This page is dedicated to standard feed posts (square and landscape aspect ratios, multi-slide video carousels, and legacy IGTV posts). If you need to save vertical short-form clips with original background audio, use our Instagram Reels Downloader.',
   },
 ];
 
@@ -49,8 +50,8 @@ export default function InstagramDownloaderPage() {
 
       <SchemaOrg
         type="WebApplication"
-        title="Instagram Video Downloader – Download Instagram Videos | SaveNexa"
-        description="Save public Instagram feed posts and videos in your browser without login or software."
+        title="Instagram Video Downloader – Download Instagram Video in HD MP4 Online | SaveNexa"
+        description="Download public Instagram feed videos, carousels, and IGTV clips in HD MP4 format directly in your browser without software."
         url={`${SITE_URL}/instagram-video-downloader`}
       />
 
@@ -58,15 +59,15 @@ export default function InstagramDownloaderPage() {
       <section className="text-center space-y-4">
         <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
           <Camera className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Instagram Feed Media Utility</span>
+          <span>Free Online Instagram Downloader</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight text-balance">
-          Instagram Video Downloader for Public Posts
+          Instagram Video Downloader
         </h1>
 
         <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-          Save public Instagram feed videos, multi-slide carousel videos, and IGTV clips in full resolution MP4 format.
+          SaveNexa is a free online Instagram video downloader that enables you to save public Instagram videos, multi-slide video carousels, and IGTV clips in high-definition MP4. Download Instagram video directly in your web browser with synchronized sound and zero app installations on iPhone, Android, Mac, or Windows.
         </p>
 
         <div className="pt-2">
@@ -74,6 +75,44 @@ export default function InstagramDownloaderPage() {
             placeholderText="Paste Instagram post URL (e.g. https://www.instagram.com/p/...)"
             defaultSampleUrl="https://www.instagram.com/p/C9Xexample_post"
           />
+        </div>
+      </section>
+
+      {/* What This Tool Supports Section */}
+      <section className="space-y-4">
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+          What This Instagram Video Downloader Supports
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Instagram Video in HD MP4</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Extracts high-definition MP4 video files from standard public feed posts, landscape videos, and IGTV episodes.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Multi-Slide Carousels</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Analyzes carousel albums and isolates playable video streams from mixed photo/video post sets.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <div className="font-bold text-slate-900 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Download Without App</span>
+            </div>
+            <p className="text-slate-600 leading-relaxed">
+              Runs in standard mobile and desktop browsers (Safari, Chrome, Firefox) with no app or account required.
+            </p>
+          </div>
         </div>
       </section>
 

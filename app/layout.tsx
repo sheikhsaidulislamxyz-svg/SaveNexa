@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Free Video Downloader for TikTok, Instagram & More | SaveNexa',
+    default: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
     template: '%s | SaveNexa',
   },
   description: SITE_DESCRIPTION,
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: SITE_URL,
     siteName: 'SaveNexa',
-    title: 'Free Video Downloader for TikTok, Instagram & More | SaveNexa',
+    title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
     description: SITE_DESCRIPTION,
     images: [
       {

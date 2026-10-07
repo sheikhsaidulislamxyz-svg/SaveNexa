@@ -7,7 +7,7 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_NAME, SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'About SaveNexa — Open Public Media Downloader Utility',
+  title: 'About Our Mission & Open Architecture',
   description: 'Learn about SaveNexa, our zero-account privacy philosophy, lightweight edge architecture, and mission to provide clean public web utilities.',
   alternates: {
     canonical: '/about',
@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     title: 'About SaveNexa | Open Public Media Downloader Utility',
     description: 'SaveNexa is a clean, mobile-first web utility for saving public online media.',
     url: `${SITE_URL}/about`,
+    images: [`${SITE_URL}/og-image.png`],
   },
 };
 
@@ -25,7 +26,7 @@ export default function AboutPage() {
       <Breadcrumbs items={[{ name: 'About', url: '/about' }]} />
 
       <SchemaOrg
-        type="WebSite"
+        type="AboutPage"
         title="About SaveNexa"
         description="Learn about SaveNexa's architecture and public media utility mission."
         url={`${SITE_URL}/about`}
