@@ -8,13 +8,15 @@ import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Why Public Video Downloads Fail & How to Fix Them',
-  description: 'Troubleshoot common online video download errors: private accounts, expired signed CDN tokens, muted DASH audio, geographic blocks, and browser restrictions.',
+  description:
+    'Troubleshoot online video download errors: private accounts, expired CDN tokens, muted DASH audio, geographic blocks, and browser restrictions.',
   alternates: {
     canonical: '/guides/why-video-downloads-fail',
   },
   openGraph: {
     title: 'Why Public Video Downloads Fail & How to Fix Them | SaveNexa',
-    description: 'Diagnose and resolve common video download errors across TikTok, Instagram, Facebook, X, Reddit, and Pinterest.',
+    description:
+      'Diagnose and resolve common video download errors across TikTok, Instagram, Facebook, X, Reddit, and Pinterest.',
     url: `${SITE_URL}/guides/why-video-downloads-fail`,
     images: [`${SITE_URL}/og-image.png`],
   },

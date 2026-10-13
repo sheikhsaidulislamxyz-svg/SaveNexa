@@ -470,13 +470,19 @@ export default function DownloaderForm({
                   Your browser does not support video playback preview.
                 </video>
               ) : analyzeJob.result.thumbnailUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={analyzeJob.result.thumbnailUrl}
-                  alt={analyzeJob.result.title || 'Media thumbnail'}
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
-                />
+                <picture>
+                  <source media="(max-width: 640px)" srcSet={analyzeJob.result.thumbnailUrl} />
+                  <img
+                    src={analyzeJob.result.thumbnailUrl}
+                    srcSet={`${analyzeJob.result.thumbnailUrl} 640w, ${analyzeJob.result.thumbnailUrl} 1080w`}
+                    sizes="(max-width: 640px) 100vw, 640px"
+                    alt={analyzeJob.result.title || 'Video preview thumbnail'}
+                    loading="lazy"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover"
+                  />
+                </picture>
               ) : (
                 <div className="flex flex-col items-center gap-2 text-slate-400">
                   <FileVideo className="w-10 h-10 text-emerald-400" />

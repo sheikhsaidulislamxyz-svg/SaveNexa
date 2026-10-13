@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Facebook Video Downloader – Download FB Videos & Reels in HD MP4 Online',
-  description: 'Download Facebook videos, FB Reels, and Watch clips online in HD MP4. Free Facebook video downloader for iPhone, Android, and PC with no app installation required.',
+  title: 'Facebook Video Downloader HD Online',
+  description:
+    'Download Facebook videos and reels online in HD MP4. Free FB video downloader via link for iPhone, Android, and PC with fast direct downloads.',
   alternates: {
     canonical: '/facebook-video-downloader',
   },
   openGraph: {
-    title: 'Facebook Video Downloader – Download FB Videos & Reels in HD MP4 Online | SaveNexa',
-    description: 'Download Facebook videos, FB Reels, and Watch clips online in HD MP4. Free Facebook video downloader for iPhone, Android, and PC with no app installation required.',
+    title: 'Facebook Video Downloader HD Online | SaveNexa',
+    description:
+      'Download Facebook videos and reels online in HD MP4. Free FB video downloader via link for iPhone, Android, and PC with fast direct downloads.',
     url: `${SITE_URL}/facebook-video-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

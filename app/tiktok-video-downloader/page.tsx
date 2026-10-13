@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'TikTok Video Downloader Online – Download TikTok Videos in HD MP4',
-  description: 'Download TikTok videos online in HD MP4 without watermarks or app installations. Free, fast TikTok video downloader for iPhone, Android, and PC with audio extraction.',
+  title: 'TikTok Video Downloader No Watermark',
+  description:
+    'Download TikTok videos without watermark in HD MP4. Free online TikTok downloader for iPhone, Android, and PC. Save public videos and audio via link.',
   alternates: {
     canonical: '/tiktok-video-downloader',
   },
   openGraph: {
-    title: 'TikTok Video Downloader Online – Download TikTok Videos in HD MP4 | SaveNexa',
-    description: 'Download TikTok videos online in HD MP4 without watermarks or app installations. Free, fast TikTok video downloader for iPhone, Android, and PC with audio extraction.',
+    title: 'TikTok Video Downloader No Watermark | SaveNexa',
+    description:
+      'Download TikTok videos without watermark in HD MP4. Free online TikTok downloader for iPhone, Android, and PC. Save public videos and audio via link.',
     url: `${SITE_URL}/tiktok-video-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

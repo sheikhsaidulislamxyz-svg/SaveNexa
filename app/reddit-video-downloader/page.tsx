@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Reddit Video Downloader – Download Reddit Video with Sound in HD MP4',
-  description: 'Download Reddit video with sound in HD MP4 online. Free v.redd.it video downloader to save public Reddit videos with audio on iPhone, Android, and PC without apps.',
+  title: 'Reddit Video Downloader with Sound',
+  description:
+    'Download Reddit videos with sound in HD MP4 online. Free Reddit video downloader via link to save public posts on iPhone, Android, and PC.',
   alternates: {
     canonical: '/reddit-video-downloader',
   },
   openGraph: {
-    title: 'Reddit Video Downloader – Download Reddit Video with Sound in HD MP4 | SaveNexa',
-    description: 'Download Reddit video with sound in HD MP4 online. Free v.redd.it video downloader to save public Reddit videos with audio on iPhone, Android, and PC without apps.',
+    title: 'Reddit Video Downloader with Sound | SaveNexa',
+    description:
+      'Download Reddit videos with sound in HD MP4 online. Free Reddit video downloader via link to save public posts on iPhone, Android, and PC.',
     url: `${SITE_URL}/reddit-video-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

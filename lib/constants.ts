@@ -1,6 +1,6 @@
 export const SITE_NAME = 'SaveNexa';
 export const SITE_TAGLINE = 'Free Video Downloader';
-export const SITE_DESCRIPTION = 'Download public videos from TikTok, Instagram, Facebook, X, Reddit and Pinterest. Fast, free and mobile-friendly — paste a link and save media in HD when available.';
+export const SITE_DESCRIPTION = 'Free online video downloader for TikTok, Instagram, Facebook, X, and Pinterest. Save HD MP4 videos and reels via link without watermarks or app installs.';
 
 export const CANONICAL_SITE_URL = 'https://save-nexa.vercel.app';
 

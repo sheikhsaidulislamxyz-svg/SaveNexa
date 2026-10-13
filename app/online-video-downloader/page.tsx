@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Online Video Downloader – Download Video from URL in MP4 Online',
-  description: 'Download video from URL online in MP4, WebM, or MOV format. Free direct video URL downloader to inspect public media links and save files without software.',
+  title: 'Online Video Downloader via URL',
+  description:
+    'Download video from URL online in HD MP4 format. Free online video downloader via link to inspect public media streams and save video files.',
   alternates: {
     canonical: '/online-video-downloader',
   },
   openGraph: {
-    title: 'Online Video Downloader – Download Video from URL in MP4 Online | SaveNexa',
-    description: 'Download video from URL online in MP4, WebM, or MOV format. Free direct video URL downloader to inspect public media links and save files without software.',
+    title: 'Online Video Downloader via URL | SaveNexa',
+    description:
+      'Download video from URL online in HD MP4 format. Free online video downloader via link to inspect public media streams and save video files.',
     url: `${SITE_URL}/online-video-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

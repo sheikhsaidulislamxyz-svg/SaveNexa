@@ -15,7 +15,20 @@ export default function Header() {
         {/* Zone 1: Brand wordmark & icon */}
         <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center transition-transform group-hover:scale-105 border border-slate-200 shadow-sm bg-slate-900">
-            <Image src="/favicon.svg" alt="SaveNexa Logo" width={32} height={32} className="w-8 h-8 object-cover" />
+            <picture>
+              <source media="(max-width: 640px)" srcSet="/favicon-48.png 1x, /favicon-96.png 2x" />
+              <img
+                src="/favicon-96.png"
+                srcSet="/favicon-48.png 48w, /favicon-96.png 96w, /favicon-192.png 192w"
+                sizes="(max-width: 640px) 32px, 48px"
+                alt="SaveNexa Free Video Downloader Logo"
+                width={32}
+                height={32}
+                loading="eager"
+                decoding="async"
+                className="w-8 h-8 object-contain"
+              />
+            </picture>
           </div>
           <span className="text-xl font-extrabold tracking-tight text-slate-900">SaveNexa</span>
         </Link>

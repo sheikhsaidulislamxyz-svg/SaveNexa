@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Instagram Video Downloader – Download Instagram Video in HD MP4 Online',
-  description: 'Download public Instagram video posts, carousels, and IGTV clips online in HD MP4. Free browser downloader to save Instagram video without apps on iPhone, Android, and PC.',
+  title: 'Instagram Video Downloader HD Online',
+  description:
+    'Download Instagram videos and reels online in HD MP4 without watermark. Free tool to save public Instagram video posts on iPhone, Android, and PC.',
   alternates: {
     canonical: '/instagram-video-downloader',
   },
   openGraph: {
-    title: 'Instagram Video Downloader – Download Instagram Video in HD MP4 Online | SaveNexa',
-    description: 'Download public Instagram video posts, carousels, and IGTV clips online in HD MP4. Free browser downloader to save Instagram video without apps on iPhone, Android, and PC.',
+    title: 'Instagram Video Downloader HD Online | SaveNexa',
+    description:
+      'Download Instagram videos and reels online in HD MP4 without watermark. Free tool to save public Instagram video posts on iPhone, Android, and PC.',
     url: `${SITE_URL}/instagram-video-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

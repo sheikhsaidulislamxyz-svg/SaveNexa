@@ -7,14 +7,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Guides & Tutorials — Public Media Download Knowledge Base',
-  description: 'Step-by-step guides for downloading and saving public videos, audio, and reels on iPhone, Android, Chrome, and Safari, plus copyright and fair use information.',
+  title: 'Video Download Guides & Tutorials',
+  description:
+    'Step-by-step guides for downloading public videos, audio, and reels on iPhone, Android, Chrome, and Safari, plus copyright and troubleshooting tips.',
   alternates: {
     canonical: '/guides',
   },
   openGraph: {
-    title: 'Guides & Tutorials — Public Media Download Knowledge Base | SaveNexa',
-    description: 'Learn how to save public media on any mobile or desktop device with SaveNexa guides.',
+    title: 'Video Download Guides & Tutorials | SaveNexa',
+    description:
+      'Learn how to save public media on any mobile or desktop device with SaveNexa step-by-step guides.',
     url: `${SITE_URL}/guides`,
     images: [`${SITE_URL}/og-image.png`],
   },

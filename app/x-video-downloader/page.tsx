@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'X (Twitter) Video Downloader – Download Twitter Video & GIF to MP4 Online',
-  description: 'Download Twitter video clips and animated GIFs from X tweets online in 1080p/720p HD MP4. Free X video downloader to save video from a tweet on iPhone, Android, and PC.',
+  title: 'Twitter Video Downloader Online | X',
+  description:
+    'Download Twitter video and GIF clips from X tweets online in HD MP4. Free Twitter video downloader for iPhone, Android, and PC with fast link download.',
   alternates: {
     canonical: '/x-video-downloader',
   },
   openGraph: {
-    title: 'X (Twitter) Video Downloader – Download Twitter Video & GIF to MP4 Online | SaveNexa',
-    description: 'Download Twitter video clips and animated GIFs from X tweets online in 1080p/720p HD MP4. Free X video downloader to save video from a tweet on iPhone, Android, and PC.',
+    title: 'Twitter Video Downloader Online | SaveNexa',
+    description:
+      'Download Twitter video and GIF clips from X tweets online in HD MP4. Free Twitter video downloader for iPhone, Android, and PC with fast link download.',
     url: `${SITE_URL}/x-video-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

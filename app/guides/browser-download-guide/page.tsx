@@ -7,13 +7,14 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Browser Video Download Troubleshooting & Tips — Chrome, Safari, Firefox',
-  description: 'Learn how to troubleshoot browser video downloads, manage popups, bypass cross-origin restrictions, and save stream links smoothly.',
+  title: 'Browser Video Download Guide & Tips',
+  description:
+    'Learn how to troubleshoot browser video downloads, manage popups, bypass cross-origin restrictions, and save stream links smoothly.',
   alternates: {
     canonical: '/guides/browser-download-guide',
   },
   openGraph: {
-    title: 'Browser Download Troubleshooting & Tips | SaveNexa',
+    title: 'Browser Video Download Guide & Tips | SaveNexa',
     description: 'Fix common browser download issues across Chrome, Safari, Firefox, and Edge.',
     url: `${SITE_URL}/guides/browser-download-guide`,
     images: [`${SITE_URL}/og-image.png`],

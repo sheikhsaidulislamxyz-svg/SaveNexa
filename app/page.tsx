@@ -20,14 +20,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SUPPORTED_PLATFORMS, SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
-  description: 'Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4. Free browser downloader with no apps or sign-up needed.',
+  title: 'SaveNexa – Free Online Video Downloader',
+  description:
+    'Free online video downloader for TikTok, Instagram, Facebook, X, and Pinterest. Save HD MP4 videos and reels via link without watermarks or app installs.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
-    description: 'Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4. Free browser downloader with no apps or sign-up needed.',
+    title: 'SaveNexa – Free Online Video Downloader',
+    description:
+      'Free online video downloader for TikTok, Instagram, Facebook, X, and Pinterest. Save HD MP4 videos and reels via link without watermarks or app installs.',
     url: SITE_URL,
     siteName: 'SaveNexa',
     images: [
@@ -41,8 +43,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
-    description: 'Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4. Free browser downloader with no apps or sign-up needed.',
+    title: 'SaveNexa – Free Online Video Downloader',
+    description:
+      'Free online video downloader for TikTok, Instagram, Facebook, X, and Pinterest. Save HD MP4 videos and reels via link without watermarks or app installs.',
     images: [`${SITE_URL}/og-image.png`],
   },
 };
@@ -85,8 +88,8 @@ export default function HomePage() {
     <div className="space-y-16 sm:space-y-24 pb-16">
       <SchemaOrg
         type="WebApplication"
-        title="Free Online Video Downloader – TikTok, Instagram, X & More | SaveNexa"
-        description="Download public videos online from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4 directly in your browser."
+        title="Free Online Video Downloader | SaveNexa"
+        description="Free online video downloader for TikTok, Instagram, Facebook, X, and Pinterest. Save HD MP4 videos via link without watermarks."
       />
 
       {/* Hero Section */}
@@ -94,15 +97,15 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
             <Zap className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Fast, Free Public Media Downloader</span>
+            <span>Free All Video Downloader Online</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15] text-balance">
-            Free Online Video Downloader for Public Social Media
+            Free Online Video Downloader & All Video Downloader
           </h1>
 
           <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed text-balance">
-            Paste a public link from TikTok, Instagram, Facebook, X, Reddit, or Pinterest to download high-definition MP4 videos, reels, and audio directly in your browser without installing apps or registering.
+            SaveNexa is a fast, free online video downloader. Download video via link from TikTok, Instagram, Facebook, X (Twitter), Reddit, and Pinterest in HD MP4 without watermarks, zero ads interruption, and no software installations.
           </p>
 
           {/* Interactive Downloader Island */}
@@ -237,6 +240,60 @@ export default function HomePage() {
             <h3 className="text-base font-bold text-slate-900">Direct CDN Streaming</h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               Streams are fetched directly from original content distribution networks without buffering heavy media through intermediary servers.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* High-Volume Keyword Integration: All Video Downloader & Platform Features */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 space-y-12">
+        <div className="text-center space-y-3 max-w-2xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            All Video Downloader: Save Public Media via Link
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            SaveNexa is an all-in-one free online video downloader designed to analyze and download video from webpage links quickly, cleanly, and securely.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+          <div className="p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              TikTok Video Downloader No Watermark
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Download TikTok videos without watermark in high-definition 1080p and 720p MP4. Our online video downloader extracts original CDN video streams directly so your saved clips remain clean, without distracting logo overlays or compression artifacts.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Instagram Video Downloader Without Watermark
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Looking for a reliable Instagram video downloader? Save public Instagram Reels, feed video posts, and IGTV clips with synchronized audio. No app install required—just paste the link in Safari or Chrome to download and save videos instantly.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Facebook Video Downloader HD
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Save public Facebook videos, FB Reels, and Watch streams in full HD quality. Simply copy the post link or fb.watch shortlink and our free video downloader online will generate direct MP4 download links for your smartphone or desktop.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white rounded-2xl border border-slate-200 space-y-2.5">
+            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Twitter (X), Reddit & Pinterest Video Downloader
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Extract tweet videos and animated GIFs from X, save Reddit videos with synchronized sound, or download aesthetic Pinterest video pins in MP4 format. SaveNexa gives you a complete, all video downloader toolkit accessible from any modern web browser.
             </p>
           </div>
         </div>

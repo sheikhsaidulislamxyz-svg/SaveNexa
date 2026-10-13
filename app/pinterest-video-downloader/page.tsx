@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Pinterest Video Downloader – Download Video Pins & Idea Pins in HD MP4',
-  description: 'Download Pinterest video pins and idea clips online in HD MP4 format. Free Pinterest video downloader to save public video pins without apps on mobile and PC.',
+  title: 'Pinterest Video Downloader HD MP4',
+  description:
+    'Download Pinterest videos and pin ideas online in HD MP4. Free Pinterest video downloader to save public video pins on iPhone, Android, and PC.',
   alternates: {
     canonical: '/pinterest-video-downloader',
   },
   openGraph: {
-    title: 'Pinterest Video Downloader – Download Video Pins & Idea Pins in HD MP4 | SaveNexa',
-    description: 'Download Pinterest video pins and idea clips online in HD MP4 format. Free Pinterest video downloader to save public video pins without apps on mobile and PC.',
+    title: 'Pinterest Video Downloader HD MP4 | SaveNexa',
+    description:
+      'Download Pinterest videos and pin ideas online in HD MP4. Free Pinterest video downloader to save public video pins on iPhone, Android, and PC.',
     url: `${SITE_URL}/pinterest-video-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

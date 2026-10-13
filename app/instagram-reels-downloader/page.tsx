@@ -9,14 +9,16 @@ import SchemaOrg from '@/components/SchemaOrg';
 import { SITE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'Instagram Reels Downloader – Download Instagram Reels with Audio in HD',
-  description: 'Download Instagram Reels with audio online in HD MP4. Free Instagram Reel downloader to save public Reels without apps on iPhone, Android, and desktop.',
+  title: 'Instagram Reels Downloader HD Online',
+  description:
+    'Download Instagram Reels with audio in HD MP4. Free online reel saver for iPhone, Android, and PC. Save public reels via link without watermarks.',
   alternates: {
     canonical: '/instagram-reels-downloader',
   },
   openGraph: {
-    title: 'Instagram Reels Downloader – Download Instagram Reels with Audio in HD | SaveNexa',
-    description: 'Download Instagram Reels with audio online in HD MP4. Free Instagram Reel downloader to save public Reels without apps on iPhone, Android, and desktop.',
+    title: 'Instagram Reels Downloader HD Online | SaveNexa',
+    description:
+      'Download Instagram Reels with audio in HD MP4. Free online reel saver for iPhone, Android, and PC. Save public reels via link without watermarks.',
     url: `${SITE_URL}/instagram-reels-downloader`,
     images: [`${SITE_URL}/og-image.png`],
   },

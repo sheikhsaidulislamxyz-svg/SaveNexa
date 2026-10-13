@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
+    default: 'SaveNexa – Free Online Video Downloader',
     template: '%s | SaveNexa',
   },
   description: SITE_DESCRIPTION,
@@ -37,15 +37,20 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
   keywords: [
     'video downloader',
-    'free video downloader',
-    'savenexa',
-    'tiktok video downloader',
-    'instagram reels downloader',
+    'all video downloader',
+    'free online video downloader',
+    'video downloader online',
+    'video downloader without watermark',
+    'download video via link',
+    'save video online',
+    'video download through link',
+    'tiktok video downloader no watermark',
+    'instagram video downloader without watermark',
     'facebook video downloader',
-    'reddit video downloader',
-    'x twitter video downloader',
+    'twitter video downloader online',
     'pinterest video downloader',
-    'save public media online',
+    'reddit video downloader',
+    'savenexa',
   ],
   authors: [{ name: 'SaveNexa Team', url: SITE_URL }],
   creator: 'SaveNexa',
@@ -61,7 +66,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: SITE_URL,
     siteName: 'SaveNexa',
-    title: 'SaveNexa – Free Online Video Downloader for Social Media & URLs',
+    title: 'SaveNexa – Free Online Video Downloader',
     description: SITE_DESCRIPTION,
     images: [
       {
@@ -74,7 +79,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Video Downloader for TikTok, Instagram & More | SaveNexa',
+    title: 'SaveNexa – Free Online Video Downloader',
     description: SITE_DESCRIPTION,
     images: [`${SITE_URL}/og-image.png`],
   },
@@ -111,8 +116,9 @@ export default function RootLayout({
 
         <meta name="google-site-verification" content="nVN-QMqk9vLK3P8un4o4KKFqzdvZmW59j74cewfGOjY" />
 
-        {/* Adsterra Native Notification Protection: Allows authentic ad rendering & voluntary clicks while blocking website click hijacking and fullscreen overlays */}
+        {/* Adsterra Native Notification Protection: Non-blocking script with defer attribute */}
         <script
+          defer
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
